@@ -1,6 +1,5 @@
 ﻿using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
-using OrlovMikhail.LJ.Grabber;
 using System;
 using System.Threading.Tasks;
 using System.Windows.Input;

@@ -3,18 +3,16 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".paket", ".paket", "{0C096AFB-DD65-4C74-86C9-5721CFB2A30E}"
+	ProjectSection(SolutionItems) = preProject
+		paket.dependencies = paket.dependencies
+	EndProjectSection
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrlovMikhail.LJ.Grabber", "OrlovMikhail.LJ.Grabber\OrlovMikhail.LJ.Grabber.csproj", "{6F4AA11D-A00C-40A8-BBEA-84EF0F2C3D46}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrlovMikhail.LJ.Grabber.Tests", "OrlovMikhail.LJ.Grabber.Tests\OrlovMikhail.LJ.Grabber.Tests.csproj", "{8AA8243C-8052-46E4-B8B7-B518B52CC17E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrlovMikhail.LJ.Grabber.Client", "OrlovMikhail.LJ.Grabber.Client\OrlovMikhail.LJ.Grabber.Client.csproj", "{0BDEDAC8-7874-474E-B215-9E9C1BDCF821}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{52994EE3-9773-4831-A9C2-74D50713D54A}"
-	ProjectSection(SolutionItems) = preProject
-		.nuget\NuGet.Config = .nuget\NuGet.Config
-		.nuget\NuGet.exe = .nuget\NuGet.exe
-		.nuget\NuGet.targets = .nuget\NuGet.targets
-	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

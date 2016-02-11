@@ -1,13 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO.Abstractions;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Autofac;
+﻿using Autofac;
 using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.Ioc;
-using OrlovMikhail.LJ.Grabber;
 
 namespace OrlovMikhail.LJ.Grabber.Client
 {
