@@ -1,6 +1,7 @@
 *.suo
 *.dll
 *.pdb
+*.user
 [Dd]ebug/
 [Re]elease/
 obj/
