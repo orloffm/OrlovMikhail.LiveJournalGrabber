@@ -42,7 +42,15 @@ namespace OrlovMikhail.LJ.Grabber
                 string[] lines = _fs.File.ReadAllLines(path);
                 foreach (string line in lines)
                 {
+                    if (String.IsNullOrWhiteSpace(line))
+                        continue;
+
                     string[] kvp = line.Split('\t');
+
+                    // Manually edited lines cause failure.
+                    if (kvp.Length != 2)
+                        throw new InvalidOperationException("Incorrect line content: '" + line + "'");
+
                     string originalUrl = kvp[0];
                     string actualFilename = kvp[1];
 
@@ -112,14 +120,14 @@ namespace OrlovMikhail.LJ.Grabber
             byte[] dataToSave = ImageHelper.EnsureNotHugePNGOrJPEG(m, data, out newExtension);
             if (newExtension != null)
                 bestName = _fs.Path.ChangeExtension(bestName, newExtension);
-            
+
             string actualFilename;
             if (!_files.TryGetValue(url.AbsoluteUri, out actualFilename))
             {
                 // File does not exist, create a name for it.
                 actualFilename = InventNewFileNameFor(bestName);
             }
-            
+
             string fullPath = MakeFullPath(actualFilename);
             FileInfoBase fi = _fs.FileInfo.FromFileName(fullPath);
             _fs.Directory.CreateDirectory(fi.DirectoryName);
@@ -135,7 +143,7 @@ namespace OrlovMikhail.LJ.Grabber
 
         /// <summary>Creates a new non-existing filename that will be used
         /// for storing the file from a given URL.</summary>
-        private string InventNewFileNameFor(string bestName )
+        private string InventNewFileNameFor(string bestName)
         {
             int counter = 0;
             string ret = bestName;
