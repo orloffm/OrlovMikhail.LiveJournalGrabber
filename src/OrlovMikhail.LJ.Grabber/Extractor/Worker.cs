@@ -10,6 +10,8 @@ namespace OrlovMikhail.LJ.Grabber
 {
     public class Worker : IWorker
     {
+        public const string DumpFileName = "dump.xml";
+
         private readonly IFileSystem _fs;
         private readonly IExtractor _ext;
         private readonly ILayerParser _lp;
@@ -28,45 +30,14 @@ namespace OrlovMikhail.LJ.Grabber
             _scp = scp;
         }
 
-        class SubfolderPassthrough : INumberingStrategy
-        {
-            private readonly string _innerFolder;
-
-            public SubfolderPassthrough(string innerFolder)
-            {
-                _innerFolder = innerFolder;
-            }
-
-            public string GetSubfolderByEntry(string s)
-            {
-                return _innerFolder;
-            }
-
-            public bool TryGetSubfolderByEntry(string s, out string sf)
-            {
-                sf = _innerFolder;
-                return true;
-            }
-
-            public int GetSortNumberBySubfolder(string subfolder)
-            {
-                throw new NotSupportedException();
-            }
-
-            public string GetFriendlyTitleBySortNumber(int? sortNumber)
-            {
-                throw new NotSupportedException();
-            }
-        }
-
         public EntryPage WorkInGivenTarget(string URI, string rootLocation, string innerFolder, string cookie)
         {
-            SubfolderPassthrough p = new SubfolderPassthrough(innerFolder);
+            SubfolderPassthroughNamingStrategy p = new SubfolderPassthroughNamingStrategy(innerFolder);
             EntryPage ret = Work(URI, rootLocation, p, cookie);
             return ret;
         }
 
-        public EntryPage Work(string URI, string rootLocation, INumberingStrategy subFolderGetter, string cookie)
+        public EntryPage Work(string URI, string rootLocation, IFolderNamingStrategy subFolderGetter, string cookie)
         {
             LiveJournalTarget t = LiveJournalTarget.FromString(URI);
             ILJClientData cookieData = _ext.Client.CreateDataObject(cookie);
@@ -75,22 +46,28 @@ namespace OrlovMikhail.LJ.Grabber
             log.InfoFormat("Extracting {0}...", t);
             EntryPage freshSource = _ext.GetFrom(t, cookieData);
 
-            string innerFolder = subFolderGetter.GetSubfolderByEntry(freshSource.Entry.Subject);
+            string innerFolder;
+            IEntryBase freshSourceEntry = freshSource.Entry;
+            if (!subFolderGetter.TryGetSubfolderByEntry(freshSourceEntry, out innerFolder))
+            {
+                string error = String.Format("Cannot extract number from entry {0}, \"{1}\".", freshSourceEntry.Id, freshSourceEntry.Subject);
+                throw new NotSupportedException(error);
+            }
+
             string subFolder = String.Format("{0}\\{1}", freshSource.Entry.Date.Value.Year, innerFolder);
-            string filename = "dump.xml";
 
             string workLocation = _fs.Path.Combine(rootLocation, subFolder);
             log.Info("Will work from " + workLocation);
 
             EntryPage ep = null;
-            string dumpFile = _fs.Path.Combine(workLocation, filename);
+            string dumpFile = _fs.Path.Combine(workLocation, DumpFileName);
             if (_fs.File.Exists(dumpFile))
             {
-                log.Info("File " + filename + " exists, will load it...");
+                log.Info("File " + DumpFileName + " exists, will load it...");
                 ep = _lp.ParseAsAnEntryPage(_fs.File.ReadAllText(dumpFile));
             }
             else
-                log.Info("File " + filename + " does not exist.");
+                log.Info("File " + DumpFileName + " does not exist.");
 
 
             bool needsSaving = _ext.AbsorbAllData(freshSource, cookieData, ref ep);

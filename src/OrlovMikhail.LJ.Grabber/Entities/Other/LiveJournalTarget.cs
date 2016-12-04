@@ -12,6 +12,7 @@ namespace OrlovMikhail.LJ.Grabber
     /// URL. Is a separate class for ease of usage.</summary>
     public sealed class LiveJournalTarget
     {
+        private long? _commentId;
         private const string extractionRegexString = @"^(?:https?://)?(?<username>[^\.]+)\.livejournal\.com/(?<postId>[0-9]*)\.html\??(?<parameters>[^#/]*)?(?:#.*)?$";
 
         private LiveJournalTarget(bool useStyleMine = false)
@@ -70,7 +71,12 @@ namespace OrlovMikhail.LJ.Grabber
 
         public string Username { get; private set; }
         public long PostId { get; private set; }
-        public long? CommentId { get; private set; }
+        public long? CommentId
+        {
+            get { return _commentId; }
+            private set { _commentId = value == 0 ? null : value; }
+        }
+
         public int? Page { get; private set; }
         /// <summary>Whether to request the page with cuts expanded.</summary>
         public bool ExpandCut { get; private set; }

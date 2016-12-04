@@ -9,6 +9,8 @@ namespace OrlovMikhail.LJ.Grabber
     [DebuggerDisplay("{Id}: {Text}")]
     public abstract class EntryBase : IEntryBase
     {
+        private string _url;
+
         public EntryBase()
         {
             Poster = new UserLite();
@@ -22,7 +24,24 @@ namespace OrlovMikhail.LJ.Grabber
         public bool IdSpecified { get { return Id != 0; } }
 
         [XmlElement("url")]
-        public string Url { get; set; }
+        public string Url
+        {
+            get { return _url; }
+            set
+            {
+                _url = value;
+
+                if (!String.IsNullOrEmpty(value) && Id == 0)
+                {
+                    // Auto-set Id from Post Id.
+                    LiveJournalTarget t = LiveJournalTarget.FromString(value);
+                    if ((t.CommentId ?? 0) < 1)
+                    {
+                        Id = t.PostId;
+                    }
+                }
+            }
+        }
 
         [XmlElement("user")]
         public UserLite Poster { get; set; }
