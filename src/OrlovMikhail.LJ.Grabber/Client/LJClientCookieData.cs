@@ -23,9 +23,18 @@ namespace OrlovMikhail.LJ.Grabber
             // BMLschemepref=dystopia; langpref=en_GB/1436793777; ljsession=v1:u1546277:s354:t1436792400:g95c3zzzzzzzzzzzzz13820f24b7699f357//1; 
             // ljdomsess.galkovsky=v1:u1546277:s354:t1436792400:gzzzzzzzzzzzz6b7bff785d2f5dfe4617dfae//1
 
+            string cookieStringTrimmed =  s.Trim().Trim('"').Trim();
+            var cookiePairs = cookieStringTrimmed.Split(';').Select(z => z.Trim().Split('='));
+
             LJClientCookieData ret = new LJClientCookieData();
-            s = s.Trim().Trim('"').Trim();
-            ret._cookies = s.Split(';').Select(z => z.Trim().Split('=')).ToDictionary(z => z[0], z => z[1]);
+            foreach (var pair in cookiePairs)
+            {
+                string key = pair[0];
+                string value = pair[1];
+
+                ret._cookies[key] = value;
+            }
+            
             return ret;
         }
 
