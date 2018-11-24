@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Remoting.Messaging;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
-namespace OrlovMikhail.LJ.Grabber
+namespace OrlovMikhail.LJ.Grabber.Entities.Other
 {
     /// <summary>Basically represents a LiveJournal entry/comments
     /// URL. Is a separate class for ease of usage.</summary>

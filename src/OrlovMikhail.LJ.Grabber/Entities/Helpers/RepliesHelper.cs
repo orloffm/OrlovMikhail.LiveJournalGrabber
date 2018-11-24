@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using log4net;
+using OrlovMikhail.LJ.Grabber.Entities.Helpers.Interfaces;
 
-namespace OrlovMikhail.LJ.Grabber
+namespace OrlovMikhail.LJ.Grabber.Entities.Helpers
 {
     public sealed class RepliesHelper : IRepliesHelper
     {

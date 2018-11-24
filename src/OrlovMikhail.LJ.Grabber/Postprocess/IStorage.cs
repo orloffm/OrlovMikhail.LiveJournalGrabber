@@ -1,7 +1,7 @@
 using System;
 using System.IO.Abstractions;
 
-namespace OrlovMikhail.LJ.Grabber
+namespace OrlovMikhail.LJ.Grabber.Postprocess
 {
     /// <summary>Storage of data by URL.</summary>
     public interface IStorage : IDisposable

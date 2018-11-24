@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
-namespace OrlovMikhail.LJ.Grabber
+namespace OrlovMikhail.LJ.Grabber.Postprocess.Files
 {
     public class FileUrlExtractor : IFileUrlExtractor
     {
@@ -25,7 +23,7 @@ namespace OrlovMikhail.LJ.Grabber
             foreach(Match m in mc)
             {
                 string url = m.Groups[0].Value;
-                bool isAnImage = Tools.IsAnImage(url);
+                bool isAnImage = Tools.Tools.IsAnImage(url);
                 if(isAnImage)
                     ret.Add(url);
             }

@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO.Abstractions;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using OrlovMikhail.LJ.Grabber.Entities;
 
-namespace OrlovMikhail.LJ.Grabber
+namespace OrlovMikhail.LJ.Grabber.Postprocess
 {
     /// <summary>Encapsulates all functionality related
     /// to saving linked files and userpics.</summary>

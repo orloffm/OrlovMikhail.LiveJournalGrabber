@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using log4net;
+using OrlovMikhail.LJ.Grabber.Entities.Helpers.Interfaces;
+using OrlovMikhail.LJ.Grabber.Postprocess.Files;
 
-namespace OrlovMikhail.LJ.Grabber
+namespace OrlovMikhail.LJ.Grabber.Entities.Helpers
 {
     public class EntryBaseHelper : IEntryBaseHelper
     {

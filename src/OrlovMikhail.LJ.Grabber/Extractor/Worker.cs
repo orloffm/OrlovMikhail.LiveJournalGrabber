@@ -1,12 +1,19 @@
-﻿using log4net;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO.Abstractions;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using log4net;
+using OrlovMikhail.LJ.Grabber.Client;
+using OrlovMikhail.LJ.Grabber.Entities;
+using OrlovMikhail.LJ.Grabber.Entities.Other;
+using OrlovMikhail.LJ.Grabber.Extractor.FolderNamingStrategy;
+using OrlovMikhail.LJ.Grabber.Extractor.Interfaces;
+using OrlovMikhail.LJ.Grabber.LayerParser;
+using OrlovMikhail.LJ.Grabber.Postprocess;
+using OrlovMikhail.LJ.Grabber.Postprocess.Filter;
 
-namespace OrlovMikhail.LJ.Grabber
+namespace OrlovMikhail.LJ.Grabber.Extractor
 {
     public class Worker : IWorker
     {

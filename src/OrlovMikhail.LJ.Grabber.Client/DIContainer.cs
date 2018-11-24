@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using GalaSoft.MvvmLight;
+using OrlovMikhail.LJ.Grabber.Client.ViewModel;
 
 namespace OrlovMikhail.LJ.Grabber.Client
 {

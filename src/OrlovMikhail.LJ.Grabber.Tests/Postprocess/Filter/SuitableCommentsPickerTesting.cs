@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using NUnit.Framework;
+using OrlovMikhail.LJ.Grabber.Entities;
+using OrlovMikhail.LJ.Grabber.Entities.Helpers;
+using OrlovMikhail.LJ.Grabber.Helpers;
+using OrlovMikhail.LJ.Grabber.Postprocess.Files;
 
-namespace OrlovMikhail.LJ.Grabber.Tests
+namespace OrlovMikhail.LJ.Grabber.Postprocess.Filter
 {
     [TestFixture]
     public class SuitableCommentsPickerTesting

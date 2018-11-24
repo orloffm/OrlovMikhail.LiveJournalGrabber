@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using OrlovMikhail.LJ.Grabber.Entities;
 
-namespace OrlovMikhail.LJ.Grabber
+namespace OrlovMikhail.LJ.Grabber.Extractor.FolderNamingStrategy
 {
     /// <summary>Saves entries to numbered directories.</summary>
     public class DefaultFolderNamingStrategy : IFolderNamingStrategy

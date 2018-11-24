@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace OrlovMikhail.LJ.Grabber.Client
+namespace OrlovMikhail.LJ.Grabber.Client.ViewModel
 {
     public class EventArgs<T> : EventArgs
     {

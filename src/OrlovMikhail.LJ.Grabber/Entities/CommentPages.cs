@@ -1,9 +1,8 @@
 using System;
 using System.ComponentModel;
-using System.Xml.Schema;
 using System.Xml.Serialization;
 
-namespace OrlovMikhail.LJ.Grabber
+namespace OrlovMikhail.LJ.Grabber.Entities
 {
     [Serializable]
     [XmlRoot("commentpages")]

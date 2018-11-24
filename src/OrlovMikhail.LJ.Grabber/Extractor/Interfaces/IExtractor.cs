@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using OrlovMikhail.LJ.Grabber.Client;
+using OrlovMikhail.LJ.Grabber.Entities;
+using OrlovMikhail.LJ.Grabber.Entities.Other;
 
-namespace OrlovMikhail.LJ.Grabber
+namespace OrlovMikhail.LJ.Grabber.Extractor.Interfaces
 {
     /// <summary>Скачивает один пост as is, но разворачивая комментарии.</summary>
     public interface IExtractor

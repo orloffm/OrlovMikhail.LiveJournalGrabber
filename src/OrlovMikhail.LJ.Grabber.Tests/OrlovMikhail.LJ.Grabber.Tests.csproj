@@ -101,7 +101,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="paket.references" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Content\testpage_247911_91512679.xml" />

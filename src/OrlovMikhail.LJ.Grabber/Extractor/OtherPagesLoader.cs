@@ -1,9 +1,14 @@
-﻿using log4net;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using log4net;
+using OrlovMikhail.LJ.Grabber.Client;
+using OrlovMikhail.LJ.Grabber.Entities;
+using OrlovMikhail.LJ.Grabber.Entities.Other;
+using OrlovMikhail.LJ.Grabber.Extractor.Interfaces;
+using OrlovMikhail.LJ.Grabber.LayerParser;
 
-namespace OrlovMikhail.LJ.Grabber
+namespace OrlovMikhail.LJ.Grabber.Extractor
 {
     public sealed class OtherPagesLoader : IOtherPagesLoader
     {

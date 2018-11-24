@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using NUnit.Framework;
+using OrlovMikhail.LJ.Grabber.Helpers;
 
-namespace OrlovMikhail.LJ.Grabber.Tests
+namespace OrlovMikhail.LJ.Grabber.Postprocess.Files
 {
     [TestFixture]
     public class FileUrlExtractorTesting
@@ -21,7 +18,7 @@ namespace OrlovMikhail.LJ.Grabber.Tests
         {
             string content = TestingShared.GetFileContent("testpage_247911.xml");
 
-            LayerParser p = new LayerParser();
+            LayerParser.LayerParser p = new LayerParser.LayerParser();
             _html = p.ParseAsAnEntryPage(content).Entry.Text;
             _ex = new FileUrlExtractor();
         }

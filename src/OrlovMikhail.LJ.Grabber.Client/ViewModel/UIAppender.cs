@@ -2,7 +2,7 @@
 using log4net.Appender;
 using log4net.Core;
 
-namespace OrlovMikhail.LJ.Grabber.Client
+namespace OrlovMikhail.LJ.Grabber.Client.ViewModel
 {
     public sealed class UIAppender : IAppender
     {

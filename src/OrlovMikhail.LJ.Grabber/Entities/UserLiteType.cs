@@ -1,4 +1,4 @@
-﻿namespace OrlovMikhail.LJ.Grabber
+﻿namespace OrlovMikhail.LJ.Grabber.Entities
 {
     public enum UserLiteType
     {

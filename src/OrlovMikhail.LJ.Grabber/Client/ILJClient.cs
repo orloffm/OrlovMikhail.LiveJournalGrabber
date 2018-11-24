@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using OrlovMikhail.LJ.Grabber.Entities.Other;
 
-namespace OrlovMikhail.LJ.Grabber
+namespace OrlovMikhail.LJ.Grabber.Client
 {
     /// <summary>Actually downloads stuff from LiveJournal.</summary>
     public interface ILJClient

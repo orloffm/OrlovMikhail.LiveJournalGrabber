@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using NUnit.Framework;
+using OrlovMikhail.LJ.Grabber.Entities;
+using OrlovMikhail.LJ.Grabber.Helpers;
 
-namespace OrlovMikhail.LJ.Grabber.Tests
+namespace OrlovMikhail.LJ.Grabber.LayerParser
 {
     [TestFixture]
     public class LayerParserTesting

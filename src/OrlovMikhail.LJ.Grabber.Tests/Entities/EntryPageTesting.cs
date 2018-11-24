@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using NUnit.Framework;
 
-namespace OrlovMikhail.LJ.Grabber.Tests.Entities
+namespace OrlovMikhail.LJ.Grabber.Entities
 {
     [TestFixture]
     public sealed class EntryPageTesting

@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows;
 
-namespace OrlovMikhail.LJ.Grabber.Client
+namespace OrlovMikhail.LJ.Grabber.Client.Controls
 {
     public sealed class StackPanelLayout : StackPanel
     {

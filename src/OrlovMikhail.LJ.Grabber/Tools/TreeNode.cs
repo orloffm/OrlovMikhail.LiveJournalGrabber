@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace OrlovMikhail.LJ.Grabber
+namespace OrlovMikhail.LJ.Grabber.Tools
 {
     public sealed class TreeNode<T> : IEnumerable<TreeNode<T>>, IEquatable<TreeNode<T>>
     {

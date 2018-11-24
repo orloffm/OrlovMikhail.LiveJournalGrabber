@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO.Abstractions;
-using System.Linq;
-using System.Text;
-
-namespace OrlovMikhail.LJ.Grabber
+﻿namespace OrlovMikhail.LJ.Grabber.Postprocess.Files
 {
     /// <summary>Creates a file storage.</summary>
     public interface IFileStorageFactory

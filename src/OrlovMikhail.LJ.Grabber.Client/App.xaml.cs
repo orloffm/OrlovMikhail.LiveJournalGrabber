@@ -1,13 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.IO.Abstractions;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows;
-using Autofac;
-using OrlovMikhail.LJ.Grabber;
+﻿using System.Windows;
 using log4net;
 
 namespace OrlovMikhail.LJ.Grabber.Client

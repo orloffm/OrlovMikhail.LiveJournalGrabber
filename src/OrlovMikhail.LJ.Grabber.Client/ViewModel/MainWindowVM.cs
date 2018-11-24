@@ -1,12 +1,13 @@
-﻿using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.CommandWpf;
-using System;
+﻿using System;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.CommandWpf;
 using log4net;
 using OrlovMikhail.LJ.Grabber.Client.Properties;
+using OrlovMikhail.LJ.Grabber.Extractor.Interfaces;
 
-namespace OrlovMikhail.LJ.Grabber.Client
+namespace OrlovMikhail.LJ.Grabber.Client.ViewModel
 {
     public class MainWindowVM : ViewModelBase, IMainWindowVM
     {

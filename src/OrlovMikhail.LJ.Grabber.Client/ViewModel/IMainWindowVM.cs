@@ -1,6 +1,6 @@
 ﻿using System.Windows.Input;
 
-namespace OrlovMikhail.LJ.Grabber.Client
+namespace OrlovMikhail.LJ.Grabber.Client.ViewModel
 {
     public interface IMainWindowVM
     {

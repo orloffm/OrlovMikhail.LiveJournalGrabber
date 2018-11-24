@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace OrlovMikhail.LJ.Grabber
+﻿namespace OrlovMikhail.LJ.Grabber.Entities
 {
     public interface IHasReplies
     {

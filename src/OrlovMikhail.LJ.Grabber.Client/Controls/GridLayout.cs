@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 
-namespace OrlovMikhail.LJ.Grabber.Client
+namespace OrlovMikhail.LJ.Grabber.Client.Controls
 {
     // The GridLayout is a special Panel that can be used exactly like the Grid Panel, except that it
     // defines a new property ChildMargin. ChildMargin's left, top, right and bottom margins will be applied

@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO.Abstractions;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace OrlovMikhail.LJ.Grabber
+﻿namespace OrlovMikhail.LJ.Grabber.Postprocess.Files
 {
     /// <summary>Stores files by names. Linear storage,
     /// stores all files in subfolders.</summary>

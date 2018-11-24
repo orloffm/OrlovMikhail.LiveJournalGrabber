@@ -1,10 +1,15 @@
 ﻿using Autofac;
-using System;
-using System.Collections.Generic;
 using System.IO.Abstractions;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using OrlovMikhail.LJ.Grabber.Client;
+using OrlovMikhail.LJ.Grabber.Entities.Helpers;
+using OrlovMikhail.LJ.Grabber.Entities.Helpers.Interfaces;
+using OrlovMikhail.LJ.Grabber.Extractor;
+using OrlovMikhail.LJ.Grabber.Extractor.Interfaces;
+using OrlovMikhail.LJ.Grabber.LayerParser;
+using OrlovMikhail.LJ.Grabber.Postprocess;
+using OrlovMikhail.LJ.Grabber.Postprocess.Files;
+using OrlovMikhail.LJ.Grabber.Postprocess.Filter;
+using OrlovMikhail.LJ.Grabber.Postprocess.Userpics;
 
 namespace OrlovMikhail.LJ.Grabber
 {
@@ -28,8 +33,8 @@ namespace OrlovMikhail.LJ.Grabber
             builder.RegisterType<EntryHelper>().As<IEntryHelper>();
             builder.RegisterType<EntryPageHelper>().As<IEntryPageHelper>();
             builder.RegisterType<RepliesHelper>().As<IRepliesHelper>();
-            builder.RegisterType<LayerParser>().As<ILayerParser>();
-            builder.RegisterType<Extractor>().As<IExtractor>();
+            builder.RegisterType<LayerParser.LayerParser>().As<ILayerParser>();
+            builder.RegisterType<Extractor.Extractor>().As<IExtractor>();
         }
     }
 }

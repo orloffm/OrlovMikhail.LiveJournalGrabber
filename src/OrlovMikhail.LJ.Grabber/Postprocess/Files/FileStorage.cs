@@ -4,10 +4,10 @@ using System.Drawing;
 using System.IO.Abstractions;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using log4net;
+using OrlovMikhail.LJ.Grabber.Postprocess.Userpics;
 
-namespace OrlovMikhail.LJ.Grabber
+namespace OrlovMikhail.LJ.Grabber.Postprocess.Files
 {
     /// <summary>Stores files in "files" subfolder.</summary>
     public class FileStorage : StorageBase, IFileStorage
@@ -88,7 +88,7 @@ namespace OrlovMikhail.LJ.Grabber
         {
             string path = System.Net.WebUtility.UrlDecode(url.AbsolutePath);
 
-            bool isImage = Tools.IsAnImage(path);
+            bool isImage = Tools.Tools.IsAnImage(path);
             if (!isImage)
             {
                 log.Error("File storage is meant only for images, won't store " + url.ToString() + ".");

@@ -2,8 +2,9 @@ using System;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Xml.Serialization;
+using OrlovMikhail.LJ.Grabber.Entities.Other;
 
-namespace OrlovMikhail.LJ.Grabber
+namespace OrlovMikhail.LJ.Grabber.Entities
 {
     [Serializable]
     [DebuggerDisplay("{Id}: {Text}")]

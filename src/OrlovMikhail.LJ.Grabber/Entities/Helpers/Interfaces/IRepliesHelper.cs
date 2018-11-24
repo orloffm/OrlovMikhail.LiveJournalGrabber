@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace OrlovMikhail.LJ.Grabber
+namespace OrlovMikhail.LJ.Grabber.Entities.Helpers.Interfaces
 {
     public interface IRepliesHelper
     {

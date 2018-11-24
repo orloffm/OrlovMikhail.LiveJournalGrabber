@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using NUnit.Framework;
+using OrlovMikhail.LJ.Grabber.Client;
+using OrlovMikhail.LJ.Grabber.Entities;
+using OrlovMikhail.LJ.Grabber.Entities.Other;
+using OrlovMikhail.LJ.Grabber.LayerParser;
 using Rhino.Mocks;
 
-namespace OrlovMikhail.LJ.Grabber.Tests
+namespace OrlovMikhail.LJ.Grabber.Extractor
 {
     [TestFixture]
     public class OtherPagesLoaderTesting

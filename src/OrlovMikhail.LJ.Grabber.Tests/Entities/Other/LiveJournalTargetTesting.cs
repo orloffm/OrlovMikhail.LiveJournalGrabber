@@ -1,7 +1,6 @@
-﻿using System;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 
-namespace OrlovMikhail.LJ.Grabber.Tests
+namespace OrlovMikhail.LJ.Grabber.Entities.Other
 {
     [TestFixture]
     public class LiveJournalTargetTesting

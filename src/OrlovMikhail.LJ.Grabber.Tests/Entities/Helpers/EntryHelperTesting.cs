@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using NUnit.Framework;
+﻿using NUnit.Framework;
+using OrlovMikhail.LJ.Grabber.Helpers;
+using OrlovMikhail.LJ.Grabber.Postprocess.Files;
+
 // ReSharper disable InvokeAsExtensionMethod
 
-namespace OrlovMikhail.LJ.Grabber.Tests
+namespace OrlovMikhail.LJ.Grabber.Entities.Helpers
 {
     [TestFixture]
     public sealed class EntryHelperTesting

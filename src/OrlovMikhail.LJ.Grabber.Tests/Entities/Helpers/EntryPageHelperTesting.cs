@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using NUnit.Framework;
+﻿using NUnit.Framework;
+using OrlovMikhail.LJ.Grabber.Entities.Helpers.Interfaces;
+using OrlovMikhail.LJ.Grabber.Helpers;
 using Rhino.Mocks;
 
 // ReSharper disable InvokeAsExtensionMethod
 
-namespace OrlovMikhail.LJ.Grabber.Tests
+namespace OrlovMikhail.LJ.Grabber.Entities.Helpers
 {
     [TestFixture]
     public sealed class EntryPageHelperTesting
