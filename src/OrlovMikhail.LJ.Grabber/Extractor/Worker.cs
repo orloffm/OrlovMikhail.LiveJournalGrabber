@@ -10,8 +10,8 @@ using OrlovMikhail.LJ.Grabber.Entities.Other;
 using OrlovMikhail.LJ.Grabber.Extractor.FolderNamingStrategy;
 using OrlovMikhail.LJ.Grabber.Extractor.Interfaces;
 using OrlovMikhail.LJ.Grabber.LayerParser;
-using OrlovMikhail.LJ.Grabber.Postprocess;
-using OrlovMikhail.LJ.Grabber.Postprocess.Filter;
+using OrlovMikhail.LJ.Grabber.PostProcess;
+using OrlovMikhail.LJ.Grabber.PostProcess.Filter;
 
 namespace OrlovMikhail.LJ.Grabber.Extractor
 {
@@ -19,29 +19,27 @@ namespace OrlovMikhail.LJ.Grabber.Extractor
     {
         public const string DumpFileName = "dump.xml";
 
-        private readonly IFileSystem _fs;
+        private static readonly ILog log = LogManager.GetLogger(typeof(Worker));
         private readonly IExtractor _ext;
+
+        private readonly IFileSystem _fs;
         private readonly ILayerParser _lp;
         private readonly IRelatedDataSaver _rds;
         private readonly ISuitableCommentsPicker _scp;
 
-        static readonly ILog log = LogManager.GetLogger(typeof(Worker));
-
-        public Worker(IFileSystem fs, IExtractor ext,
-            ILayerParser lp, IRelatedDataSaver rds, ISuitableCommentsPicker scp)
+        public Worker(
+            IFileSystem fs
+            , IExtractor ext
+            , ILayerParser lp
+            , IRelatedDataSaver rds
+            , ISuitableCommentsPicker scp
+        )
         {
             _fs = fs;
             _ext = ext;
             _lp = lp;
             _rds = rds;
             _scp = scp;
-        }
-
-        public EntryPage WorkInGivenTarget(string URI, string rootLocation, string innerFolder, string cookie)
-        {
-            SubfolderPassthroughNamingStrategy p = new SubfolderPassthroughNamingStrategy(innerFolder);
-            EntryPage ret = Work(URI, rootLocation, p, cookie);
-            return ret;
         }
 
         public EntryPage Work(string URI, string rootLocation, IFolderNamingStrategy subFolderGetter, string cookie)
@@ -57,11 +55,15 @@ namespace OrlovMikhail.LJ.Grabber.Extractor
             IEntryBase freshSourceEntry = freshSource.Entry;
             if (!subFolderGetter.TryGetSubfolderByEntry(freshSourceEntry, out innerFolder))
             {
-                string error = String.Format("Cannot extract number from entry {0}, \"{1}\".", freshSourceEntry.Id, freshSourceEntry.Subject);
+                string error = string.Format(
+                    "Cannot extract number from entry {0}, \"{1}\"."
+                    , freshSourceEntry.Id
+                    , freshSourceEntry.Subject
+                );
                 throw new NotSupportedException(error);
             }
 
-            string subFolder = String.Format("{0}\\{1}", freshSource.Entry.Date.Value.Year, innerFolder);
+            string subFolder = string.Format("{0}\\{1}", freshSource.Entry.Date.Value.Year, innerFolder);
 
             string workLocation = _fs.Path.Combine(rootLocation, subFolder);
             log.Info("Will work from " + workLocation);
@@ -74,8 +76,9 @@ namespace OrlovMikhail.LJ.Grabber.Extractor
                 ep = _lp.ParseAsAnEntryPage(_fs.File.ReadAllText(dumpFile));
             }
             else
+            {
                 log.Info("File " + DumpFileName + " does not exist.");
-
+            }
 
             bool needsSaving = _ext.AbsorbAllData(freshSource, cookieData, ref ep);
 
@@ -86,7 +89,7 @@ namespace OrlovMikhail.LJ.Grabber.Extractor
                 string content = _lp.Serialize(ep);
                 _fs.Directory.CreateDirectory(workLocation);
 
-                UTF8Encoding enc = new UTF8Encoding(encoderShouldEmitUTF8Identifier: true);
+                UTF8Encoding enc = new UTF8Encoding(true);
                 _fs.File.WriteAllText(dumpFile, content, enc);
 
                 // Pick usable comments.
@@ -94,7 +97,7 @@ namespace OrlovMikhail.LJ.Grabber.Extractor
                 log.Info("Picked threads: " + comments.Count + ".");
 
                 // Everything we want to store.
-                List<EntryBase> allData = new List<EntryBase>();
+                var allData = new List<EntryBase>();
                 allData.Add(ep.Entry);
                 allData.AddRange(comments.SelectMany(a => a));
 
@@ -104,6 +107,13 @@ namespace OrlovMikhail.LJ.Grabber.Extractor
 
             log.Info("Finished.");
             return ep;
+        }
+
+        public EntryPage WorkInGivenTarget(string URI, string rootLocation, string innerFolder, string cookie)
+        {
+            SubfolderPassthroughNamingStrategy p = new SubfolderPassthroughNamingStrategy(innerFolder);
+            EntryPage ret = Work(URI, rootLocation, p, cookie);
+            return ret;
         }
     }
 }

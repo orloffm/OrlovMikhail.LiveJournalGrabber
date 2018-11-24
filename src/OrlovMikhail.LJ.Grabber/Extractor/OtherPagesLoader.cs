@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using log4net;
 using OrlovMikhail.LJ.Grabber.Client;
@@ -12,10 +11,9 @@ namespace OrlovMikhail.LJ.Grabber.Extractor
 {
     public sealed class OtherPagesLoader : IOtherPagesLoader
     {
-        private readonly ILayerParser _parser;
+        private static readonly ILog log = LogManager.GetLogger(typeof(OtherPagesLoader));
         private readonly ILJClient _client;
-
-        static readonly ILog log = LogManager.GetLogger(typeof(OtherPagesLoader));
+        private readonly ILayerParser _parser;
 
         public OtherPagesLoader(ILayerParser parser, ILJClient client)
         {
@@ -28,31 +26,50 @@ namespace OrlovMikhail.LJ.Grabber.Extractor
             int initialIndex = commentPages.Current;
             int total = commentPages.Total;
 
-            log.Info(String.Format("Loading other comment pages given page №{0} out of {1}.", commentPages.Current, commentPages.Total));
+            log.Info(
+                string.Format(
+                    "Loading other comment pages given page №{0} out of {1}."
+                    , commentPages.Current
+                    , commentPages.Total
+                )
+            );
 
             // We need to download these.
-            int[] need = Enumerable.Range(1, total).Where(i => i != initialIndex).ToArray();
+            int[] need = Enumerable.Range(1, total)
+                .Where(i => i != initialIndex)
+                .ToArray();
             IDictionary<int, LiveJournalTarget> targets = new SortedDictionary<int, LiveJournalTarget>();
             IDictionary<int, EntryPage> pages = new SortedDictionary<int, EntryPage>();
             EntryPage p;
 
             CommentPages latest = commentPages;
-            while(pages.Count < need.Length)
+            while (pages.Count < need.Length)
             {
                 int cur = latest.Current;
 
-                if(cur != 1 && !String.IsNullOrWhiteSpace(latest.FirstUrl))
+                if (cur != 1 && !string.IsNullOrWhiteSpace(latest.FirstUrl))
+                {
                     targets[1] = LiveJournalTarget.FromString(latest.FirstUrl);
-                if(cur != total && !String.IsNullOrWhiteSpace(latest.LastUrl))
+                }
+
+                if (cur != total && !string.IsNullOrWhiteSpace(latest.LastUrl))
+                {
                     targets[total] = LiveJournalTarget.FromString(latest.LastUrl);
-                if(!String.IsNullOrWhiteSpace(latest.PrevUrl))
+                }
+
+                if (!string.IsNullOrWhiteSpace(latest.PrevUrl))
+                {
                     targets[cur - 1] = LiveJournalTarget.FromString(latest.PrevUrl);
-                if(!String.IsNullOrWhiteSpace(latest.NextUrl))
+                }
+
+                if (!string.IsNullOrWhiteSpace(latest.NextUrl))
+                {
                     targets[cur + 1] = LiveJournalTarget.FromString(latest.NextUrl);
+                }
 
                 // First target without a page.
                 int keyToDownload = targets.Keys.First(z => z != initialIndex && !pages.ContainsKey(z));
-                log.Info(String.Format("Will download page №{0}.", keyToDownload));
+                log.Info(string.Format("Will download page №{0}.", keyToDownload));
                 LiveJournalTarget targetToDownload = targets[keyToDownload];
 
                 // Download the page.
@@ -60,7 +77,7 @@ namespace OrlovMikhail.LJ.Grabber.Extractor
                 p = _parser.ParseAsAnEntryPage(content);
                 latest = p.CommentPages;
                 pages[keyToDownload] = p;
-                log.Info(String.Format("Parsed page №{0}.", keyToDownload));
+                log.Info(string.Format("Parsed page №{0}.", keyToDownload));
             }
 
             EntryPage[] ret = pages.Values.ToArray();

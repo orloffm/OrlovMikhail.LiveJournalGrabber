@@ -6,42 +6,40 @@ namespace OrlovMikhail.LJ.Grabber.Tools
 {
     public sealed class TreeNode<T> : IEnumerable<TreeNode<T>>, IEquatable<TreeNode<T>>
     {
+        public TreeNode(T data, TreeNode<T> parent = null)
+        {
+            Data = data;
+            Parent = parent;
+            Children = new LinkedList<TreeNode<T>>();
+        }
+
+        public ICollection<TreeNode<T>> Children { get; }
+
         public T Data { get; set; }
-        public TreeNode<T> Parent { get; private set; }
-        public ICollection<TreeNode<T>> Children { get { return _children; } }
-        private readonly ICollection<TreeNode<T>> _children;
 
-        public bool IsRoot
-        {
-            get { return Parent == null; }
-        }
+        public bool IsLeaf => Children.Count == 0;
 
-        public bool IsLeaf
-        {
-            get { return _children.Count == 0; }
-        }
+        public bool IsRoot => Parent == null;
 
         public int Level
         {
             get
             {
-                if (this.IsRoot)
+                if (IsRoot)
+                {
                     return 0;
+                }
+
                 return Parent.Level + 1;
             }
         }
 
-        public TreeNode(T data, TreeNode<T> parent = null)
-        {
-            this.Data = data;
-            this.Parent = parent;
-            this._children = new LinkedList<TreeNode<T>>();
-        }
+        public TreeNode<T> Parent { get; private set; }
 
         public TreeNode<T> AddChild(T child)
         {
-            TreeNode<T> childNode = new TreeNode<T>(child) { Parent = this };
-            this._children.Add(childNode);
+            var childNode = new TreeNode<T>(child) {Parent = this};
+            Children.Add(childNode);
 
             return childNode;
         }
@@ -61,16 +59,19 @@ namespace OrlovMikhail.LJ.Grabber.Tools
         public IEnumerator<TreeNode<T>> GetEnumerator()
         {
             yield return this;
-            foreach (var directChild in this._children)
+            foreach (TreeNode<T> directChild in Children)
             {
-                foreach (var anyChild in directChild)
+                foreach (TreeNode<T> anyChild in directChild)
+                {
                     yield return anyChild;
+                }
             }
         }
 
         #endregion
 
         #region equality
+
         public bool Equals(TreeNode<T> other)
         {
             return ReferenceEquals(this, other);
@@ -78,13 +79,14 @@ namespace OrlovMikhail.LJ.Grabber.Tools
 
         public override int GetHashCode()
         {
-            return this.Data.GetHashCode();
+            return Data.GetHashCode();
         }
 
         public override bool Equals(object obj)
         {
             return ReferenceEquals(this, obj);
         }
+
         #endregion
     }
 }

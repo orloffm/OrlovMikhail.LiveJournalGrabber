@@ -1,4 +1,4 @@
-﻿namespace OrlovMikhail.LJ.Grabber.Postprocess.Files
+﻿namespace OrlovMikhail.LJ.Grabber.PostProcess.Files
 {
     /// <summary>Creates a file storage.</summary>
     public interface IFileStorageFactory

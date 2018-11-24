@@ -48,20 +48,6 @@ namespace OrlovMikhail.LJ.Grabber.LayerParser
         }
 
         [Test]
-        public void StoresUserpic()
-        {
-            string content = TestingShared.GetFileContent("testpage_247911.xml");
-
-            LayerParser p = new LayerParser();
-            EntryPage page = p.ParseAsAnEntryPage(content);
-
-            page.Replies.Comments.Clear();
-
-            string serialized = p.Serialize(page);
-            Assert.IsTrue(serialized.Contains("<userpic "));
-        }
-
-        [Test]
         public void StoresUsername()
         {
             string content = TestingShared.GetFileContent("testpage_247911.xml");
@@ -75,6 +61,20 @@ namespace OrlovMikhail.LJ.Grabber.LayerParser
             page = p.ParseAsAnEntryPage(serialized);
 
             Assert.That(page.Entry.Poster.Username, Is.Not.Null.And.Not.Empty);
+        }
+
+        [Test]
+        public void StoresUserpic()
+        {
+            string content = TestingShared.GetFileContent("testpage_247911.xml");
+
+            LayerParser p = new LayerParser();
+            EntryPage page = p.ParseAsAnEntryPage(content);
+
+            page.Replies.Comments.Clear();
+
+            string serialized = p.Serialize(page);
+            Assert.IsTrue(serialized.Contains("<userpic "));
         }
     }
 }

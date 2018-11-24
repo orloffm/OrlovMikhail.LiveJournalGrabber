@@ -1,6 +1,6 @@
 ﻿using System.IO.Abstractions;
 
-namespace OrlovMikhail.LJ.Grabber.Postprocess.Userpics
+namespace OrlovMikhail.LJ.Grabber.PostProcess.Userpics
 {
     public class UserpicStorageFactory : IUserpicStorageFactory
     {

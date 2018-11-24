@@ -14,14 +14,14 @@ namespace OrlovMikhail.LJ.Grabber.Client.Controls
     public sealed class GridLayout : Grid
     {
         public static readonly DependencyProperty ChildMarginProperty = DependencyProperty.Register(
-            "ChildMargin",
-            typeof(Thickness),
-            typeof(GridLayout),
-            new FrameworkPropertyMetadata(new Thickness(8))
+            "ChildMargin"
+            , typeof(Thickness)
+            , typeof(GridLayout)
+            , new FrameworkPropertyMetadata(new Thickness(8))
             {
-                AffectsArrange = true,
-                AffectsMeasure = true
-            });
+                AffectsArrange = true, AffectsMeasure = true
+            }
+        );
         // The child margin defines a margin that will be automatically applied to all children of this Grid.
         // However, the children at the edges will have the respective margins remove. E.g. the leftmost children will have
         // a Margin.Left of 0 and the children in the first row will have a Margin.Top of 0.
@@ -30,79 +30,11 @@ namespace OrlovMikhail.LJ.Grabber.Client.Controls
 
         public Thickness ChildMargin
         {
-            get { return (Thickness)GetValue(ChildMarginProperty); }
+            get => (Thickness) GetValue(ChildMarginProperty);
             set
             {
                 SetValue(ChildMarginProperty, value);
                 UpdateChildMargins();
-            }
-        }
-
-        // UpdateChildMargin first finds out what's the rightmost
-        // column and bottom row and then applies
-        // the correct margins to all children.
-
-        void UpdateChildMargins()
-        {
-            int maxColumn = 0;
-            int maxRow = 0;
-            int minColumn = int.MaxValue;
-            int minRow = int.MaxValue;
-
-            // look for maxRow and maxColumn
-            foreach(UIElement element in InternalChildren)
-            {
-                if(element.Visibility == System.Windows.Visibility.Collapsed)
-                    continue;
-
-                int row = GetRow(element);
-                int rowSpan = GetRowSpan(element);
-                int column = GetColumn(element);
-                int columnSpan = GetColumnSpan(element);
-
-                if(row < minRow)
-                    minRow = row;
-                if(column < minColumn)
-                    minColumn = column;
-                if(row + rowSpan > maxRow)
-                    maxRow = row + rowSpan;
-                if(column + columnSpan > maxColumn)
-                    maxColumn = column + columnSpan;
-            }
-
-            foreach(UIElement element in InternalChildren)
-            {
-                if(element.Visibility == System.Windows.Visibility.Collapsed)
-                    continue;
-
-                FrameworkElement fe = element as FrameworkElement;
-                if(null != fe)
-                {
-                    int row = GetRow(fe);
-                    int rowSpan = GetRowSpan(fe);
-                    int column = GetColumn(fe);
-                    int columnSpan = GetColumnSpan(fe);
-                    double factorLeft = 0.5;
-                    double factorTop = 0.5;
-                    double factorRight = 0.5;
-                    double factorBottom = 0.5;
-                    // Top row - no top margin
-                    if(row <= minRow)
-                        factorTop = 0;
-                    // Bottom row - no bottom margin
-                    if(row + rowSpan >= maxRow)
-                        factorBottom = 0;
-                    // Leftmost column = no left margin
-                    if(column <= minColumn)
-                        factorLeft = 0;
-                    // Rightmost column - no right margin
-                    if(column + columnSpan >= maxColumn)
-                        factorRight = 0;
-                    fe.Margin = new Thickness(ChildMargin.Left * factorLeft,
-                                               ChildMargin.Top * factorTop,
-                                               ChildMargin.Right * factorRight,
-                                               ChildMargin.Bottom * factorBottom);
-                }
             }
         }
 
@@ -115,6 +47,103 @@ namespace OrlovMikhail.LJ.Grabber.Client.Controls
         {
             UpdateChildMargins();
             return base.MeasureOverride(availableSize);
+        }
+
+        // UpdateChildMargin first finds out what's the rightmost
+        // column and bottom row and then applies
+        // the correct margins to all children.
+
+        private void UpdateChildMargins()
+        {
+            int maxColumn = 0;
+            int maxRow = 0;
+            int minColumn = int.MaxValue;
+            int minRow = int.MaxValue;
+
+            // look for maxRow and maxColumn
+            foreach (UIElement element in InternalChildren)
+            {
+                if (element.Visibility == Visibility.Collapsed)
+                {
+                    continue;
+                }
+
+                int row = GetRow(element);
+                int rowSpan = GetRowSpan(element);
+                int column = GetColumn(element);
+                int columnSpan = GetColumnSpan(element);
+
+                if (row < minRow)
+                {
+                    minRow = row;
+                }
+
+                if (column < minColumn)
+                {
+                    minColumn = column;
+                }
+
+                if (row + rowSpan > maxRow)
+                {
+                    maxRow = row + rowSpan;
+                }
+
+                if (column + columnSpan > maxColumn)
+                {
+                    maxColumn = column + columnSpan;
+                }
+            }
+
+            foreach (UIElement element in InternalChildren)
+            {
+                if (element.Visibility == Visibility.Collapsed)
+                {
+                    continue;
+                }
+
+                FrameworkElement fe = element as FrameworkElement;
+                if (null != fe)
+                {
+                    int row = GetRow(fe);
+                    int rowSpan = GetRowSpan(fe);
+                    int column = GetColumn(fe);
+                    int columnSpan = GetColumnSpan(fe);
+                    double factorLeft = 0.5;
+                    double factorTop = 0.5;
+                    double factorRight = 0.5;
+                    double factorBottom = 0.5;
+                    // Top row - no top margin
+                    if (row <= minRow)
+                    {
+                        factorTop = 0;
+                    }
+
+                    // Bottom row - no bottom margin
+                    if (row + rowSpan >= maxRow)
+                    {
+                        factorBottom = 0;
+                    }
+
+                    // Leftmost column = no left margin
+                    if (column <= minColumn)
+                    {
+                        factorLeft = 0;
+                    }
+
+                    // Rightmost column - no right margin
+                    if (column + columnSpan >= maxColumn)
+                    {
+                        factorRight = 0;
+                    }
+
+                    fe.Margin = new Thickness(
+                        ChildMargin.Left * factorLeft
+                        , ChildMargin.Top * factorTop
+                        , ChildMargin.Right * factorRight
+                        , ChildMargin.Bottom * factorBottom
+                    );
+                }
+            }
         }
     }
 }

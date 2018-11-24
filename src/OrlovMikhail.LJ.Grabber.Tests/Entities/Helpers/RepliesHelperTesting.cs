@@ -1,43 +1,54 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using NUnit.Framework;
 using OrlovMikhail.LJ.Grabber.Helpers;
-using OrlovMikhail.LJ.Grabber.Postprocess.Files;
+using OrlovMikhail.LJ.Grabber.PostProcess.Files;
 
 namespace OrlovMikhail.LJ.Grabber.Entities.Helpers
 {
     [TestFixture]
     public sealed class RepliesHelperTesting
     {
-        private RepliesHelper _rh;
-
         [SetUp]
         public void BeforeTests()
         {
             _rh = new RepliesHelper(new EntryBaseHelper(new FileUrlExtractor()));
         }
 
-        #region comments
+        private RepliesHelper _rh;
 
         [Test]
-        public void MergesAllFullComments()
+        public void EnumerateFoldedComments_Works()
         {
-            EntryPage target = TestingShared.GenerateEntryPage();
-            EntryPage source = TestingShared.GenerateEntryPage(makeAllFull: true);
+            Replies cs = new Replies();
+            Comment a = new Comment {Id = 11, IsFull = false, Text = string.Empty};
+            Comment aB = new Comment {Id = 12, IsFull = true, Text = "2"};
+            Comment aBc = new Comment {Id = 13, IsFull = false, Text = string.Empty};
+            Comment aD = new Comment {Id = 14, IsFull = false, Text = string.Empty};
 
-            Comment[] commentsBefore = _rh.EnumerateAll(target.Replies).ToArray();
+            cs.Comments.Add(a);
+            a.Replies.Comments.Add(aB);
+            a.Replies.Comments.Add(aD);
+            aB.Replies.Comments.Add(aBc);
 
-            _rh.MergeFrom(target, source);
+            long[] texts = _rh.EnumerateRequiringFullUp(cs)
+                .Select(z => z.Id)
+                .ToArray();
+            Assert.AreEqual(3, texts.Length, "Should've found 3 comments.");
+            CollectionAssert.AreEqual(new long[] {11, 13, 14}, texts, "Collections match.");
 
-            Comment[] commentsAfter = _rh.EnumerateAll(target.Replies).ToArray();
+            Assert.AreEqual(
+                1
+                , _rh.EnumerateFull(cs)
+                    .Count()
+                , "Should've found 1 comment."
+            );
 
-            // No objects replaced.
-            for(int i = 0; i < commentsBefore.Length; i++)
-            {
-                Assert.AreSame(commentsBefore[i], commentsAfter[i]);
-                Assert.IsTrue(commentsAfter[i].IsFull);
-                Assert.IsTrue(!String.IsNullOrWhiteSpace(commentsAfter[i].Text));
-            }
+            Assert.AreEqual(
+                4
+                , _rh.EnumerateAll(cs)
+                    .Count()
+                , "Should've found 4 comments."
+            );
         }
 
         [Test]
@@ -51,26 +62,66 @@ namespace OrlovMikhail.LJ.Grabber.Entities.Helpers
             _rh.MergeFrom(p1, p3);
             _rh.MergeFrom(p1, p2);
 
-            Comment[] comments = _rh.EnumerateAll(p1.Replies).ToArray();
+            Comment[] comments = _rh.EnumerateAll(p1.Replies)
+                .ToArray();
             Assert.AreEqual(12, comments.Length, "Comments should've been added.");
             CollectionAssert.AllItemsAreUnique(comments.Select(z => z.Id));
             CollectionAssert.IsOrdered(comments.Select(z => z.Id));
         }
-        #endregion
 
-        #region new version update
+        [Test]
+        public void MergesAllFullComments()
+        {
+            EntryPage target = TestingShared.GenerateEntryPage();
+            EntryPage source = TestingShared.GenerateEntryPage(true);
+
+            Comment[] commentsBefore = _rh.EnumerateAll(target.Replies)
+                .ToArray();
+
+            _rh.MergeFrom(target, source);
+
+            Comment[] commentsAfter = _rh.EnumerateAll(target.Replies)
+                .ToArray();
+
+            // No objects replaced.
+            for (int i = 0; i < commentsBefore.Length; i++)
+            {
+                Assert.AreSame(commentsBefore[i], commentsAfter[i]);
+                Assert.IsTrue(
+                    commentsAfter[i]
+                        .IsFull
+                );
+                Assert.IsTrue(
+                    !string.IsNullOrWhiteSpace(
+                        commentsAfter[i]
+                            .Text
+                    )
+                );
+            }
+        }
+
+        [Test]
+        public void ThrowsIfNewVersionIsOfDifferentId()
+        {
+            Comment a, b;
+            TestingShared.CreateTwoComments(out a, out b);
+            b.Id++;
+
+            Assert.That(() => _rh.UpdateDirectDataWith(a, b), Throws.ArgumentException);
+        }
+
         [Test]
         public void UpdatesTheCommentTree()
         {
             Comment a, b;
             TestingShared.CreateTwoComments(out a, out b);
 
-            Comment c = new Comment() { Id = 3 };
+            Comment c = new Comment {Id = 3};
             a.Replies.Comments.Add(c);
-            Comment e = new Comment() { Id = 5 };
+            Comment e = new Comment {Id = 5};
             a.Replies.Comments.Add(e);
 
-            Comment d = new Comment() { Id = 4 };
+            Comment d = new Comment {Id = 4};
             b.Replies.Comments.Add(d);
 
             _rh.MergeFrom(a, b);
@@ -100,42 +151,5 @@ namespace OrlovMikhail.LJ.Grabber.Entities.Helpers
             Assert.AreEqual(oldParentUrl, a.ParentUrl);
             Assert.AreEqual(b.DateValue, a.DateValue);
         }
-
-        [Test]
-        public void ThrowsIfNewVersionIsOfDifferentId()
-        {
-            Comment a, b;
-            TestingShared.CreateTwoComments(out a, out b);
-            b.Id++;
-
-            Assert.That(() => _rh.UpdateDirectDataWith(a, b), Throws.ArgumentException);
-        }
-        #endregion
-
-        #region comment enumeration
-        [Test]
-        public void EnumerateFoldedComments_Works()
-        {
-            Replies cs = new Replies();
-            Comment a = new Comment() { Id = 11, IsFull = false, Text = String.Empty };
-            Comment aB = new Comment() { Id = 12, IsFull = true, Text = "2" };
-            Comment aBc = new Comment() { Id = 13, IsFull = false, Text = String.Empty };
-            Comment aD = new Comment() { Id = 14, IsFull = false, Text = String.Empty };
-
-            cs.Comments.Add(a);
-            a.Replies.Comments.Add(aB);
-            a.Replies.Comments.Add(aD);
-            aB.Replies.Comments.Add(aBc);
-
-            long[] texts = _rh.EnumerateRequiringFullUp(cs).Select(z => z.Id).ToArray();
-            Assert.AreEqual(3, texts.Length, "Should've found 3 comments.");
-            CollectionAssert.AreEqual(new long[] { 11, 13, 14 }, texts, "Collections match.");
-
-            Assert.AreEqual(1, _rh.EnumerateFull(cs).Count(), "Should've found 1 comment.");
-
-            Assert.AreEqual(4, _rh.EnumerateAll(cs).Count(), "Should've found 4 comments.");
-
-        }
-        #endregion
     }
 }

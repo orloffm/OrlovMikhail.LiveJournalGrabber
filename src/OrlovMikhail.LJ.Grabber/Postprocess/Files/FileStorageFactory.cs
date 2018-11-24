@@ -1,6 +1,6 @@
 ﻿using System.IO.Abstractions;
 
-namespace OrlovMikhail.LJ.Grabber.Postprocess.Files
+namespace OrlovMikhail.LJ.Grabber.PostProcess.Files
 {
     public class FileStorageFactory : IFileStorageFactory
     {

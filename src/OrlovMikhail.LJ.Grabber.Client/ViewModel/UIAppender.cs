@@ -6,22 +6,23 @@ namespace OrlovMikhail.LJ.Grabber.Client.ViewModel
 {
     public sealed class UIAppender : IAppender
     {
-        public event EventHandler<EventArgs<string>> StringAdded;
-
         public UIAppender()
         {
             Name = "UI appender.";
         }
 
+        public string Name { get; set; }
+
         public void Close()
         {
-
         }
 
         public void DoAppend(LoggingEvent loggingEvent)
         {
             if (loggingEvent.Level <= Level.Debug)
+            {
                 return;
+            }
 
             if (StringAdded != null)
             {
@@ -30,6 +31,6 @@ namespace OrlovMikhail.LJ.Grabber.Client.ViewModel
             }
         }
 
-        public string Name { get; set; }
+        public event EventHandler<EventArgs<string>> StringAdded;
     }
 }

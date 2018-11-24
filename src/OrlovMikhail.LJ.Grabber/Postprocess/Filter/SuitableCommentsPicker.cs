@@ -6,7 +6,7 @@ using OrlovMikhail.LJ.Grabber.Entities;
 using OrlovMikhail.LJ.Grabber.Entities.Helpers.Interfaces;
 using OrlovMikhail.LJ.Grabber.Tools;
 
-namespace OrlovMikhail.LJ.Grabber.Postprocess.Filter
+namespace OrlovMikhail.LJ.Grabber.PostProcess.Filter
 {
     public class SuitableCommentsPicker : ISuitableCommentsPicker
     {

@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.ComponentModel;
+using System.Windows;
 using System.Windows.Controls;
 using OrlovMikhail.LJ.Grabber.Client.ViewModel;
 
@@ -16,9 +17,9 @@ namespace OrlovMikhail.LJ.Grabber.Client.Views
             txtLog.ScrollToEnd();
         }
 
-        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        private void Window_Closing(object sender, CancelEventArgs e)
         {
-            IMainWindowVM vm = this.DataContext as IMainWindowVM;
+            IMainWindowVM vm = DataContext as IMainWindowVM;
             vm.SaveSettings();
         }
     }

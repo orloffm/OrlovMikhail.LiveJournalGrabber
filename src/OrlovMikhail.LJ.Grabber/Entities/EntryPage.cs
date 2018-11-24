@@ -9,9 +9,9 @@ namespace OrlovMikhail.LJ.Grabber.Entities
     {
         public EntryPage()
         {
-            this.Replies = new Replies();
-            this.Entry = new Entry();
-            this.CommentPages = new CommentPages();
+            Replies = new Replies();
+            Entry = new Entry();
+            CommentPages = new CommentPages();
         }
 
         [XmlElement("entry")]
@@ -25,7 +25,7 @@ namespace OrlovMikhail.LJ.Grabber.Entities
 
         public bool ShouldSerializeCommentPages()
         {
-            return this.CommentPages != null && !CommentPages.IsEmpty(this.CommentPages);
+            return CommentPages != null && !CommentPages.IsEmpty(CommentPages);
         }
     }
 }

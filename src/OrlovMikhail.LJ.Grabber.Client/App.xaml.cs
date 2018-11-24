@@ -1,15 +1,20 @@
-﻿using System.Windows;
+﻿using System.Reflection;
+using System.Windows;
 using log4net;
+using log4net.Config;
 
 namespace OrlovMikhail.LJ.Grabber.Client
 {
     public partial class App : Application
     {
-        private static readonly ILog Log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly ILog Log = LogManager.GetLogger(
+            MethodBase.GetCurrentMethod()
+                .DeclaringType
+        );
 
         protected override void OnStartup(StartupEventArgs e)
         {
-            log4net.Config.XmlConfigurator.Configure();
+            XmlConfigurator.Configure();
             Log.Info("Hello World");
             base.OnStartup(e);
         }

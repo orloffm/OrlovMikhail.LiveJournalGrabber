@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO.Abstractions;
 
-namespace OrlovMikhail.LJ.Grabber.Postprocess
+namespace OrlovMikhail.LJ.Grabber.PostProcess
 {
     public abstract class StorageBase : IStorage
     {

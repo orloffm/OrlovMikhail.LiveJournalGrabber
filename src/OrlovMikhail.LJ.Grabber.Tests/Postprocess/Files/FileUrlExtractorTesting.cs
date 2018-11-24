@@ -2,26 +2,27 @@
 using NUnit.Framework;
 using OrlovMikhail.LJ.Grabber.Helpers;
 
-namespace OrlovMikhail.LJ.Grabber.Postprocess.Files
+namespace OrlovMikhail.LJ.Grabber.PostProcess.Files
 {
     [TestFixture]
     public class FileUrlExtractorTesting
     {
-        private string _html;
-        private IFileUrlExtractor _ex;
-
-        private const string Url1 = @"http://www.samisdat.com/picture/LJ3/3409.jpg";
-        private const string Url2 = @"http://www.samisdat.com/picture/LJ3/3423.jpg";
-
         [SetUp]
         public void LoadHtml()
         {
             string content = TestingShared.GetFileContent("testpage_247911.xml");
 
             LayerParser.LayerParser p = new LayerParser.LayerParser();
-            _html = p.ParseAsAnEntryPage(content).Entry.Text;
+            _html = p.ParseAsAnEntryPage(content)
+                .Entry.Text;
             _ex = new FileUrlExtractor();
         }
+
+        private string _html;
+        private IFileUrlExtractor _ex;
+
+        private const string Url1 = @"http://www.samisdat.com/picture/LJ3/3409.jpg";
+        private const string Url2 = @"http://www.samisdat.com/picture/LJ3/3423.jpg";
 
         [Test]
         public void ParsesFromContent()
@@ -40,12 +41,17 @@ namespace OrlovMikhail.LJ.Grabber.Postprocess.Files
             Func<string, string> matcher = s =>
             {
                 called++;
-                if(s == Url1)
+                if (s == Url1)
+                {
                     return "ABC";
-                else if(s == Url2)
+                }
+
+                if (s == Url2)
+                {
                     return null;
-                else
-                    return s;
+                }
+
+                return s;
             };
 
             string result = _ex.ReplaceFileUrls(_html, matcher);

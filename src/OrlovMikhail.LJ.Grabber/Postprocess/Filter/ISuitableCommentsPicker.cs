@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using OrlovMikhail.LJ.Grabber.Entities;
 
-namespace OrlovMikhail.LJ.Grabber.Postprocess.Filter
+namespace OrlovMikhail.LJ.Grabber.PostProcess.Filter
 {
     /// <summary>Returns comments as arrays of branches
     /// containing journal owner.</summary>

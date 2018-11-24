@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using OrlovMikhail.LJ.Grabber.Entities;
 
-namespace OrlovMikhail.LJ.Grabber.Postprocess
+namespace OrlovMikhail.LJ.Grabber.PostProcess
 {
     /// <summary>Encapsulates all functionality related
     /// to saving linked files and userpics.</summary>

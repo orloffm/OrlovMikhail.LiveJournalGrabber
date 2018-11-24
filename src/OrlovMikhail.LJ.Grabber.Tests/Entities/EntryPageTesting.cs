@@ -13,10 +13,15 @@ namespace OrlovMikhail.LJ.Grabber.Entities
             // Does the function exist with the proper name?
             Type t = typeof(EntryPage);
 
-            string propertyName = t.GetProperties().Single(z => z.PropertyType == typeof(CommentPages)).Name;
-            bool methodExists = t.GetMethods().Any(z => z.Name == "ShouldSerialize" + propertyName);
-            if(!methodExists)
+            string propertyName = t.GetProperties()
+                .Single(z => z.PropertyType == typeof(CommentPages))
+                .Name;
+            bool methodExists = t.GetMethods()
+                .Any(z => z.Name == "ShouldSerialize" + propertyName);
+            if (!methodExists)
+            {
                 throw new Exception("No serialization method.");
+            }
 
             // Non-empty
             EntryPage ep = new EntryPage();

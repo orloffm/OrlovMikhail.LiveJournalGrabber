@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 namespace OrlovMikhail.LJ.Grabber.Client
 {
     public class LJClientCookieData : ILJClientData
     {
-        Dictionary<string, string> _cookies;
+        private readonly Dictionary<string, string> _cookies;
 
         private LJClientCookieData()
         {
@@ -21,37 +20,51 @@ namespace OrlovMikhail.LJ.Grabber.Client
             // BMLschemepref=dystopia; langpref=en_GB/1436793777; ljsession=v1:u1546277:s354:t1436792400:g95c3zzzzzzzzzzzzz13820f24b7699f357//1; 
             // ljdomsess.galkovsky=v1:u1546277:s354:t1436792400:gzzzzzzzzzzzz6b7bff785d2f5dfe4617dfae//1
 
-            string cookieStringTrimmed =  s.Trim().Trim('"').Trim();
-            var cookiePairs = cookieStringTrimmed.Split(';').Select(z => z.Trim().Split('='));
+            string cookieStringTrimmed = s.Trim()
+                .Trim('"')
+                .Trim();
+            IEnumerable<string[]> cookiePairs = cookieStringTrimmed.Split(';')
+                .Select(
+                    z => z.Trim()
+                        .Split('=')
+                );
 
             LJClientCookieData ret = new LJClientCookieData();
-            foreach (var pair in cookiePairs)
+            foreach (string[] pair in cookiePairs)
             {
                 string key = pair[0];
                 string value = pair[1];
 
                 ret._cookies[key] = value;
             }
-            
+
             return ret;
         }
 
         public Dictionary<string, string> GetCookiesToUse()
         {
-            string[] values = new[] { "ljloggedin", "ljsession", "ljdomsess" };
+            string[] values = {"ljloggedin", "ljsession", "ljdomsess"};
 
-            Dictionary<string, string> ret = new Dictionary<string, string>();
+            var ret = new Dictionary<string, string>();
 
-            foreach(var kvp in _cookies)
-                if(values.Any(z => kvp.Key.Contains(z)))
+            foreach (KeyValuePair<string, string> kvp in _cookies)
+            {
+                if (values.Any(z => kvp.Key.Contains(z)))
+                {
                     ret.Add(kvp.Key, kvp.Value);
+                }
+            }
 
             return ret;
         }
 
         public override string ToString()
         {
-            return String.Join("; ", GetCookiesToUse().Select(kvp => kvp.Key + "=" + kvp.Value));
+            return string.Join(
+                "; "
+                , GetCookiesToUse()
+                    .Select(kvp => kvp.Key + "=" + kvp.Value)
+            );
         }
     }
 }

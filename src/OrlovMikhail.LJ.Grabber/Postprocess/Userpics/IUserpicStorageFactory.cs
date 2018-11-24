@@ -1,4 +1,4 @@
-﻿namespace OrlovMikhail.LJ.Grabber.Postprocess.Userpics
+﻿namespace OrlovMikhail.LJ.Grabber.PostProcess.Userpics
 {
     public interface IUserpicStorageFactory
     {

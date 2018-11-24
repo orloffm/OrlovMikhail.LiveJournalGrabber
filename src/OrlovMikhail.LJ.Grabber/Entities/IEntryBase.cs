@@ -4,12 +4,18 @@ namespace OrlovMikhail.LJ.Grabber.Entities
 {
     public interface IEntryBase
     {
-        long Id { get; set; }
-        string Url { get; set; }
-        UserLite Poster { get; set; }
-        Userpic PosterUserpic { get; set; }
         DateTime? Date { get; set; }
-        string Text { get; set; }
+
+        long Id { get; set; }
+
+        UserLite Poster { get; set; }
+
+        Userpic PosterUserpic { get; set; }
+
         string Subject { get; set; }
+
+        string Text { get; set; }
+
+        string Url { get; set; }
     }
 }

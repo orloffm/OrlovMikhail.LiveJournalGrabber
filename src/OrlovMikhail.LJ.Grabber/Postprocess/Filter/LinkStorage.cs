@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace OrlovMikhail.LJ.Grabber.Postprocess.Filter
+namespace OrlovMikhail.LJ.Grabber.PostProcess.Filter
 {
     public class LinkStorage<T>
     {
-        Dictionary<T, HashSet<T>> _dic;
+        readonly Dictionary<T, HashSet<T>> _dic;
 
         public LinkStorage()
         {

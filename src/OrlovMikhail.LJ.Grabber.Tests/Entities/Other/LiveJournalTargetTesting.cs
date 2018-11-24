@@ -5,11 +5,24 @@ namespace OrlovMikhail.LJ.Grabber.Entities.Other
     [TestFixture]
     public class LiveJournalTargetTesting
     {
-
         [TestCase(@"http://galkovsky.livejournal.com/15915.html", "galkovsky", 15915L, null, null, false)]
-        [TestCase(@"http://galkovsky.livejournal.com/247911.html?thread=91572583&style=mine#t91572583", "galkovsky", 247911L, 91572583L, null, true)]
+        [TestCase(
+            @"http://galkovsky.livejournal.com/247911.html?thread=91572583&style=mine#t91572583"
+            , "galkovsky"
+            , 247911L
+            , 91572583L
+            , null
+            , true
+        )]
         [TestCase(@"http://galkovsky.livejournal.com/247911.html?page=2", "galkovsky", 247911L, null, 2, false)]
-        public void ParsesRawUrlStringsCorrectly(string source, string username, long postId, long? commentId, int? page, bool styleMine)
+        public void ParsesRawUrlStringsCorrectly(
+            string source
+            , string username
+            , long postId
+            , long? commentId
+            , int? page
+            , bool styleMine
+        )
         {
             LiveJournalTarget ret = LiveJournalTarget.FromString(source);
             Assert.AreEqual(username, ret.Username);
@@ -19,11 +32,46 @@ namespace OrlovMikhail.LJ.Grabber.Entities.Other
             Assert.AreEqual(page, ret.Page);
         }
 
-        [TestCase("galkovsky", 247911L, 91572583L, null, true, ExpectedResult = @"http://galkovsky.livejournal.com/247911.html?thread=91572583&style=mine")]
-        [TestCase("galkovsky", 247911L, 91572583L, null, false, ExpectedResult = @"http://galkovsky.livejournal.com/247911.html?thread=91572583")]
-        [TestCase("galkovsky", 247911L, null, null, true, ExpectedResult = @"http://galkovsky.livejournal.com/247911.html?style=mine")]
-        [TestCase("galkovsky", 247911L, null, 2, false, ExpectedResult = @"http://galkovsky.livejournal.com/247911.html?page=2")]
-        [TestCase("galkovsky", 247911L, null, 2, true, ExpectedResult = @"http://galkovsky.livejournal.com/247911.html?page=2&style=mine")]
+        [TestCase(
+            "galkovsky"
+            , 247911L
+            , 91572583L
+            , null
+            , true
+            , ExpectedResult = @"http://galkovsky.livejournal.com/247911.html?thread=91572583&style=mine"
+        )]
+        [TestCase(
+            "galkovsky"
+            , 247911L
+            , 91572583L
+            , null
+            , false
+            , ExpectedResult = @"http://galkovsky.livejournal.com/247911.html?thread=91572583"
+        )]
+        [TestCase(
+            "galkovsky"
+            , 247911L
+            , null
+            , null
+            , true
+            , ExpectedResult = @"http://galkovsky.livejournal.com/247911.html?style=mine"
+        )]
+        [TestCase(
+            "galkovsky"
+            , 247911L
+            , null
+            , 2
+            , false
+            , ExpectedResult = @"http://galkovsky.livejournal.com/247911.html?page=2"
+        )]
+        [TestCase(
+            "galkovsky"
+            , 247911L
+            , null
+            , 2
+            , true
+            , ExpectedResult = @"http://galkovsky.livejournal.com/247911.html?page=2&style=mine"
+        )]
         public string ConvertedToStringOk(string username, long postId, long? commentId, int? page, bool styleMine)
         {
             LiveJournalTarget ret = new LiveJournalTarget(username, postId, commentId, page, styleMine);

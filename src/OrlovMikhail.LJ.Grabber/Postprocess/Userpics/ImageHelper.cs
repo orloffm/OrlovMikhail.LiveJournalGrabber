@@ -6,7 +6,7 @@ using System.IO;
 using System.IO.Abstractions;
 using System.Linq;
 
-namespace OrlovMikhail.LJ.Grabber.Postprocess.Userpics
+namespace OrlovMikhail.LJ.Grabber.PostProcess.Userpics
 {
     public static class ImageHelper
     {

@@ -6,11 +6,11 @@ namespace OrlovMikhail.LJ.Grabber.Entities
 {
     [Serializable]
     [XmlRoot("comments")]
-    public class Replies 
+    public class Replies
     {
         public Replies()
         {
-            this.Comments = new List<Comment>();
+            Comments = new List<Comment>();
         }
 
         [XmlElement("comment")]
@@ -19,11 +19,17 @@ namespace OrlovMikhail.LJ.Grabber.Entities
         public override string ToString()
         {
             if (Comments == null || Comments.Count == 0)
+            {
                 return "Empty list of comments.";
+            }
 
-            string ret = String.Format("{0} comments, parent is {1}", Comments.Count, Comments[0].ParentUrl);
+            string ret = string.Format(
+                "{0} comments, parent is {1}"
+                , Comments.Count
+                , Comments[0]
+                    .ParentUrl
+            );
             return ret;
         }
     }
-
 }

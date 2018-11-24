@@ -1,4 +1,4 @@
-﻿namespace OrlovMikhail.LJ.Grabber.Postprocess.Files
+﻿namespace OrlovMikhail.LJ.Grabber.PostProcess.Files
 {
     /// <summary>Stores files by names. Linear storage,
     /// stores all files in subfolders.</summary>

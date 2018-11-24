@@ -10,10 +10,6 @@ namespace OrlovMikhail.LJ.Grabber.Entities.Helpers
     [TestFixture]
     public sealed class EntryPageHelperTesting
     {
-        private EntryPageHelper _eph;
-        private IEntryHelper _entryHelper;
-        private IRepliesHelper _repliesHelper;
-
         [SetUp]
         public void BeforeTests()
         {
@@ -24,28 +20,16 @@ namespace OrlovMikhail.LJ.Grabber.Entities.Helpers
             _eph = new EntryPageHelper(_entryHelper, _repliesHelper);
         }
 
-        [Test]
-        public void ThrowsIfNoTargetSpecified()
-        {
-            EntryPage other = TestingShared.GenerateEntryPage();
-
-            Assert.That(() => _eph.AddData(null, other), Throws.ArgumentNullException);
-        }
-
-        [Test]
-        public void ThrowsIfNoSourceSpecified()
-        {
-            EntryPage other = TestingShared.GenerateEntryPage();
-
-            Assert.That(() => _eph.AddData(other, null), Throws.ArgumentNullException);
-        }
+        private EntryPageHelper _eph;
+        private IEntryHelper _entryHelper;
+        private IRepliesHelper _repliesHelper;
 
         [TestCase(true)]
         [TestCase(false)]
         public void EnsuresTargetCommentsPagesDataIsNull(bool startFromEmpty)
         {
             EntryPage target = startFromEmpty ? new EntryPage() : TestingShared.GenerateEntryPage();
-            EntryPage source = TestingShared.GenerateEntryPage(makeAllFull: true);
+            EntryPage source = TestingShared.GenerateEntryPage(true);
 
             _eph.AddData(target, source);
 
@@ -58,13 +42,31 @@ namespace OrlovMikhail.LJ.Grabber.Entities.Helpers
             EntryPage target = new EntryPage();
             EntryPage source = new EntryPage();
 
-            _entryHelper.Expect(z => z.UpdateWith(target.Entry, source.Entry)).Return(true);
-            _repliesHelper.Expect(z => z.MergeFrom(target, source)).Return(true);
+            _entryHelper.Expect(z => z.UpdateWith(target.Entry, source.Entry))
+                .Return(true);
+            _repliesHelper.Expect(z => z.MergeFrom(target, source))
+                .Return(true);
 
             _eph.AddData(target, source);
 
             _entryHelper.VerifyAllExpectations();
             _repliesHelper.VerifyAllExpectations();
+        }
+
+        [Test]
+        public void ThrowsIfNoSourceSpecified()
+        {
+            EntryPage other = TestingShared.GenerateEntryPage();
+
+            Assert.That(() => _eph.AddData(other, null), Throws.ArgumentNullException);
+        }
+
+        [Test]
+        public void ThrowsIfNoTargetSpecified()
+        {
+            EntryPage other = TestingShared.GenerateEntryPage();
+
+            Assert.That(() => _eph.AddData(null, other), Throws.ArgumentNullException);
         }
     }
 }

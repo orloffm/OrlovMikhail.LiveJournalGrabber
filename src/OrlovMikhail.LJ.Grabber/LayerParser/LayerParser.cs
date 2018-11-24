@@ -12,26 +12,31 @@ namespace OrlovMikhail.LJ.Grabber.LayerParser
         {
             // Sometimes there are zeroes and control characters.
             StringBuilder sanitizer = new StringBuilder(content.Length);
-            foreach(char c in content)
+            foreach (char c in content)
             {
-                if(c < 32 && (c != '\n' && c != '\r' && c != '\t'))
+                if (c < 32 && c != '\n' && c != '\r' && c != '\t')
+                {
                     continue;
+                }
 
                 sanitizer.Append(c);
             }
+
             content = sanitizer.ToString();
 
             XmlSerializer s = new XmlSerializer(typeof(EntryPage));
             EntryPage ret;
-            using(StringReader sr = new StringReader(content))
-                ret = (EntryPage)s.Deserialize(sr);
+            using (StringReader sr = new StringReader(content))
+            {
+                ret = (EntryPage) s.Deserialize(sr);
+            }
 
             return ret;
         }
 
         public string Serialize(EntryPage ep)
         {
-            UTF8Encoding enc = new UTF8Encoding(encoderShouldEmitUTF8Identifier: false);
+            UTF8Encoding enc = new UTF8Encoding(false);
 
             XmlWriterSettings settings = new XmlWriterSettings();
             settings.OmitXmlDeclaration = true;

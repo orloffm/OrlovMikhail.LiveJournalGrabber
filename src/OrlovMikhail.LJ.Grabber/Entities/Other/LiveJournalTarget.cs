@@ -4,26 +4,53 @@ using System.Text.RegularExpressions;
 
 namespace OrlovMikhail.LJ.Grabber.Entities.Other
 {
-    /// <summary>Basically represents a LiveJournal entry/comments
-    /// URL. Is a separate class for ease of usage.</summary>
+    /// <summary>
+    ///     Basically represents a LiveJournal entry/comments
+    ///     URL. Is a separate class for ease of usage.
+    /// </summary>
     public sealed class LiveJournalTarget
     {
+        private const string extractionRegexString =
+            @"^(?:https?://)?(?<username>[^\.]+)\.livejournal\.com/(?<postId>[0-9]*)\.html\??(?<parameters>[^#/]*)?(?:#.*)?$";
+
         private long? _commentId;
-        private const string extractionRegexString = @"^(?:https?://)?(?<username>[^\.]+)\.livejournal\.com/(?<postId>[0-9]*)\.html\??(?<parameters>[^#/]*)?(?:#.*)?$";
 
         private LiveJournalTarget(bool useStyleMine = false)
         {
-            this.UseStyleMine = useStyleMine;
+            UseStyleMine = useStyleMine;
         }
 
-        public LiveJournalTarget(string userName, long postId, long? commentId = null, int? page = null, bool useStyleMine = true)
-            : this(useStyleMine)
+        public LiveJournalTarget(
+            string userName
+            , long postId
+            , long? commentId = null
+            , int? page = null
+            , bool useStyleMine = true
+        ) : this(useStyleMine)
         {
-            this.Username = userName;
-            this.PostId = postId;
-            this.CommentId = commentId;
-            this.Page = page;
+            Username = userName;
+            PostId = postId;
+            CommentId = commentId;
+            Page = page;
         }
+
+        public long? CommentId
+        {
+            get => _commentId;
+            private set => _commentId = value == 0 ? null : value;
+        }
+
+        /// <summary>Whether to request the page with cuts expanded.</summary>
+        public bool ExpandCut { get; private set; }
+
+        public int? Page { get; private set; }
+
+        public long PostId { get; private set; }
+
+        public string Username { get; private set; }
+
+        /// <summary>Whether to apply "style mine" to the url.</summary>
+        public bool UseStyleMine { get; private set; }
 
         public static LiveJournalTarget FromString(string rawString)
         {
@@ -31,13 +58,20 @@ namespace OrlovMikhail.LJ.Grabber.Entities.Other
             Match m = r.Match(rawString);
 
             if (!m.Success)
+            {
                 throw new ArgumentException();
+            }
 
-            LiveJournalTarget ret = new LiveJournalTarget(useStyleMine: false);
-            ret.Username = m.Groups["username"].Value;
-            ret.PostId = long.Parse(m.Groups["postId"].Value);
+            LiveJournalTarget ret = new LiveJournalTarget(false);
+            ret.Username = m.Groups["username"]
+                .Value;
+            ret.PostId = long.Parse(
+                m.Groups["postId"]
+                    .Value
+            );
 
-            string arguments = m.Groups["parameters"].Value;
+            string arguments = m.Groups["parameters"]
+                .Value;
             string[] kvps = arguments.Split('&', '=');
 
             for (int i = 0; i < kvps.Length - 1; i += 2)
@@ -45,17 +79,19 @@ namespace OrlovMikhail.LJ.Grabber.Entities.Other
                 string key = kvps[i];
                 string value = kvps[i + 1];
 
-                if (String.Equals(key, "style", StringComparison.OrdinalIgnoreCase))
+                if (string.Equals(key, "style", StringComparison.OrdinalIgnoreCase))
                 {
-                    if (String.Equals(value, "mine", StringComparison.OrdinalIgnoreCase))
+                    if (string.Equals(value, "mine", StringComparison.OrdinalIgnoreCase))
+                    {
                         ret.UseStyleMine = true;
+                    }
                 }
-                else if (String.Equals(key, "thread", StringComparison.OrdinalIgnoreCase))
+                else if (string.Equals(key, "thread", StringComparison.OrdinalIgnoreCase))
                 {
                     // Comment id.
                     ret.CommentId = long.Parse(value);
                 }
-                else if (String.Equals(key, "page", StringComparison.OrdinalIgnoreCase))
+                else if (string.Equals(key, "page", StringComparison.OrdinalIgnoreCase))
                 {
                     // Paget id.
                     ret.Page = int.Parse(value);
@@ -65,38 +101,45 @@ namespace OrlovMikhail.LJ.Grabber.Entities.Other
             return ret;
         }
 
-        public string Username { get; private set; }
-        public long PostId { get; private set; }
-        public long? CommentId
+        public Uri GetUri()
         {
-            get { return _commentId; }
-            private set { _commentId = value == 0 ? null : value; }
+            return new Uri(MakeUrl());
         }
 
-        public int? Page { get; private set; }
-        /// <summary>Whether to request the page with cuts expanded.</summary>
-        public bool ExpandCut { get; private set; }
-        /// <summary>Whether to apply "style mine" to the url.</summary>
-        public bool UseStyleMine { get; private set; }
-
-        public LiveJournalTarget WithStyleMine(bool value = true)
+        public bool SameItem(LiveJournalTarget b)
         {
-            LiveJournalTarget ret = this.MemberwiseClone() as LiveJournalTarget;
-            ret.UseStyleMine = value;
-            return ret;
+            return PostId == b.PostId && CommentId == b.CommentId && Username == b.Username;
         }
 
-        public LiveJournalTarget WithCutExpand(bool value = true)
+        public string ToShortString()
         {
-            LiveJournalTarget ret = this.MemberwiseClone() as LiveJournalTarget;
-            ret.ExpandCut = value;
-            return ret;
+            string s = string.Format("{0}/{1}", Username, PostId);
+            if ((Page ?? 1) > 1)
+            {
+                s += "#" + Page.Value;
+            }
+
+            return s;
         }
 
         /// <summary>Creates the URL string.</summary>
         public override string ToString()
         {
             string ret = MakeUrl();
+            return ret;
+        }
+
+        public LiveJournalTarget WithCutExpand(bool value = true)
+        {
+            LiveJournalTarget ret = MemberwiseClone() as LiveJournalTarget;
+            ret.ExpandCut = value;
+            return ret;
+        }
+
+        public LiveJournalTarget WithStyleMine(bool value = true)
+        {
+            LiveJournalTarget ret = MemberwiseClone() as LiveJournalTarget;
+            ret.UseStyleMine = value;
             return ret;
         }
 
@@ -137,24 +180,6 @@ namespace OrlovMikhail.LJ.Grabber.Entities.Other
 
             string ret = sb.ToString();
             return ret;
-        }
-
-        public string ToShortString()
-        {
-            string s = String.Format("{0}/{1}", Username, PostId);
-            if ((Page ?? 1) > 1)
-                s += "#" + Page.Value;
-            return s;
-        }
-
-        public Uri GetUri()
-        {
-            return new Uri(MakeUrl());
-        }
-
-        public bool SameItem(LiveJournalTarget b)
-        {
-            return this.PostId == b.PostId && this.CommentId == b.CommentId && this.Username == b.Username;
         }
     }
 }

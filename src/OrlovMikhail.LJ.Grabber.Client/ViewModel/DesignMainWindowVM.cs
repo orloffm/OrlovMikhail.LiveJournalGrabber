@@ -4,59 +4,40 @@ namespace OrlovMikhail.LJ.Grabber.Client.ViewModel
 {
     public class DesignMainWindowVM : IMainWindowVM
     {
-        public string Cookie
+        public string BookRootLocation
         {
-            get { return "Cookie text"; }
+            get => "Base location";
             set { }
         }
 
-        public string Log
+        public string Cookie
         {
-            get { return "A\nB\nC\nD"; }
+            get => "Cookie text";
+            set { }
         }
 
-        public ICommand RunCommand
-        {
-            get { return null; }
-        }
+        public bool IsEnabled => true;
 
-        public void SaveSettings()
-        {
-            
-        }
+        public string Log => "A\nB\nC\nD";
 
-        public ICommand SaveResultCommand
+        public ICommand RunCommand => null;
+
+        public ICommand SaveResultCommand => null;
+
+        public string Subfolder
         {
-            get { return null; }
+            get => "Sub folder";
+            set { }
         }
 
         public string URI
         {
-            get { return "http://galkovsky.livejournal.com/"; }
+            get => "http://galkovsky.livejournal.com/";
             set { }
         }
 
-
-        public string BookRootLocation
+        public void SaveSettings()
         {
-            get { return "Base location"; }
-            set
-            {
-
-            }
-        }
-
-        public string Subfolder
-        {
-            get { return "Sub folder"; }
-            set
-            {
-            }
-        }
-
-        public bool IsEnabled
-        {
-            get { return true; }
         }
     }
 }

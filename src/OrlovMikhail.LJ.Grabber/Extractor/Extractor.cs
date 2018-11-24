@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using log4net;
 using OrlovMikhail.LJ.Grabber.Client;
 using OrlovMikhail.LJ.Grabber.Entities;
@@ -12,17 +11,19 @@ namespace OrlovMikhail.LJ.Grabber.Extractor
 {
     public sealed class Extractor : IExtractor
     {
-        readonly ILayerParser _parser;
-        public ILJClient Client { get; private set; }
-        readonly IEntryPageHelper _entryPageHelper;
-        readonly IRepliesHelper _repliesHelper;
-        readonly IOtherPagesLoader _otherPagesLoader;
+        private static readonly ILog log = LogManager.GetLogger(typeof(Extractor));
+        private readonly IEntryPageHelper _entryPageHelper;
+        private readonly IOtherPagesLoader _otherPagesLoader;
+        private readonly ILayerParser _parser;
+        private readonly IRepliesHelper _repliesHelper;
 
-        static readonly ILog log = LogManager.GetLogger(typeof(Extractor));
-
-        public Extractor(ILayerParser parser, ILJClient client,
-            IEntryPageHelper entryPageHelper, IRepliesHelper repliesHelper,
-            IOtherPagesLoader otherPagesLoader)
+        public Extractor(
+            ILayerParser parser
+            , ILJClient client
+            , IEntryPageHelper entryPageHelper
+            , IRepliesHelper repliesHelper
+            , IOtherPagesLoader otherPagesLoader
+        )
         {
             _parser = parser;
             Client = client;
@@ -31,11 +32,13 @@ namespace OrlovMikhail.LJ.Grabber.Extractor
             _otherPagesLoader = otherPagesLoader;
         }
 
+        public ILJClient Client { get; }
+
         public bool AbsorbAllData(EntryPage freshSource, ILJClientData clientData, ref EntryPage dumpData)
         {
             bool appliedAnything = false;
 
-            if(dumpData == null)
+            if (dumpData == null)
             {
                 dumpData = new EntryPage();
                 appliedAnything = true;
@@ -46,10 +49,12 @@ namespace OrlovMikhail.LJ.Grabber.Extractor
             // TryGet all comments.
             EntryPage[] otherPages = _otherPagesLoader.LoadOtherCommentPages(freshSource.CommentPages, clientData);
 
-            foreach(EntryPage pageX in otherPages)
+            foreach (EntryPage pageX in otherPages)
+            {
                 appliedAnything |= _entryPageHelper.AddData(dumpData, pageX);
+            }
 
-            while(true)
+            while (true)
             {
                 IEnumerable<Comment> allFoldedComments = _repliesHelper.EnumerateRequiringFullUp(dumpData.Replies);
                 IEnumerator<Comment> enumerator = allFoldedComments.GetEnumerator();
@@ -57,30 +62,34 @@ namespace OrlovMikhail.LJ.Grabber.Extractor
                 int foldedCommentsLeft = 0;
                 Comment c = null;
 
-                while(enumerator.MoveNext())
+                while (enumerator.MoveNext())
                 {
                     foldedCommentsLeft++;
-                    if(c == null)
+                    if (c == null)
+                    {
                         c = enumerator.Current;
+                    }
                 }
 
                 // How many comments left?
-                log.Info(String.Format("Folded comments left: {0}.", foldedCommentsLeft));
-                if(foldedCommentsLeft == 0)
+                log.Info(string.Format("Folded comments left: {0}.", foldedCommentsLeft));
+                if (foldedCommentsLeft == 0)
+                {
                     break;
-                
+                }
+
                 LiveJournalTarget commentTarget = LiveJournalTarget.FromString(c.Url);
                 EntryPage commentPage = GetFrom(commentTarget, clientData);
                 Comment fullVersion = commentPage.Replies.Comments[0];
-                if(fullVersion.IsFull == false)
+                if (fullVersion.IsFull == false)
                 {
                     // This should be a suspended user.
-                    log.Info(String.Format("Comment {0} seems to be from a suspended user.", c));
+                    log.Info(string.Format("Comment {0} seems to be from a suspended user.", c));
                     c.IsSuspendedUser = true;
                     continue;
                 }
 
-                log.Info(String.Format("Merging comment data for comment {0}.", c));
+                log.Info(string.Format("Merging comment data for comment {0}.", c));
                 appliedAnything |= _repliesHelper.MergeFrom(c, fullVersion);
             }
 

@@ -5,9 +5,9 @@ using System.IO.Abstractions;
 using System.Linq;
 using System.Text;
 using log4net;
-using OrlovMikhail.LJ.Grabber.Postprocess.Userpics;
+using OrlovMikhail.LJ.Grabber.PostProcess.Userpics;
 
-namespace OrlovMikhail.LJ.Grabber.Postprocess.Files
+namespace OrlovMikhail.LJ.Grabber.PostProcess.Files
 {
     /// <summary>Stores files in "files" subfolder.</summary>
     public class FileStorage : StorageBase, IFileStorage

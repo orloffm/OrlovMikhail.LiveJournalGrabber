@@ -11,57 +11,48 @@ namespace OrlovMikhail.LJ.Grabber.Entities
     {
         public Comment()
         {
-            this.IsFull = true;
-            this.Policy = UsagePolicy.Default;
-            this.Replies = new Replies();
+            IsFull = true;
+            Policy = UsagePolicy.Default;
+            Replies = new Replies();
         }
 
         [XmlAttribute("depth")]
         public int Depth { get; set; }
-
-        /// <summary>Allows to override the usage of the 
-        /// comment when writing the target file.</summary>
-        [XmlAttribute("policy")]
-        [DefaultValue(UsagePolicy.Default)]
-        public UsagePolicy Policy { get; set; }
-
-          [XmlIgnore]
-        public bool PolicySpecified { get{return Policy != UsagePolicy.Default; }}
-
-        [XmlAttribute("full")]
-        [DefaultValue(true)]
-        public bool IsFull { get; set; }
-
-        [XmlIgnore]
-        public bool IsFullSpecified { get { return !IsFull; } }
 
         [XmlAttribute("deleted")]
         [DefaultValue(false)]
         public bool IsDeleted { get; set; }
 
         [XmlIgnore]
-        public bool IsDeletedSpecified { get { return IsDeleted; } }
-
-        [XmlAttribute("screened")]
-        [DefaultValue(false)]
-        public bool IsScreened { get; set; }
-
-        [XmlIgnore]
-        public bool IsScreenedSpecified { get { return IsScreened; } }
+        public bool IsDeletedSpecified => IsDeleted;
 
         [XmlAttribute("frozen")]
         [DefaultValue(false)]
         public bool IsFrozen { get; set; }
 
         [XmlIgnore]
-        public bool IsFrozenSpecified { get { return IsFrozen; } }
+        public bool IsFrozenSpecified => IsFrozen;
+
+        [XmlAttribute("full")]
+        [DefaultValue(true)]
+        public bool IsFull { get; set; }
+
+        [XmlIgnore]
+        public bool IsFullSpecified => !IsFull;
+
+        [XmlAttribute("screened")]
+        [DefaultValue(false)]
+        public bool IsScreened { get; set; }
+
+        [XmlIgnore]
+        public bool IsScreenedSpecified => IsScreened;
 
         [XmlAttribute("suspended")]
         [DefaultValue(false)]
         public bool IsSuspendedUser { get; set; }
 
         [XmlIgnore]
-        public bool IsSuspendedUserSpecified { get { return IsSuspendedUser; } }
+        public bool IsSuspendedUserSpecified => IsSuspendedUser;
 
         [XmlElement("comments")]
         public Replies Replies { get; set; }
@@ -70,17 +61,29 @@ namespace OrlovMikhail.LJ.Grabber.Entities
         public string ParentUrl { get; set; }
 
         [XmlIgnore]
-        public bool ParentUrlSpecified { get { return !String.IsNullOrWhiteSpace(ParentUrl); } }
+        public bool ParentUrlSpecified => !string.IsNullOrWhiteSpace(ParentUrl);
+
+        /// <summary>
+        ///     Allows to override the usage of the
+        ///     comment when writing the target file.
+        /// </summary>
+        [XmlAttribute("policy")]
+        [DefaultValue(UsagePolicy.Default)]
+        public UsagePolicy Policy { get; set; }
+
+        [XmlIgnore]
+        public bool PolicySpecified => Policy != UsagePolicy.Default;
 
         public Comment MakeClone()
         {
-            return this.MemberwiseClone() as Comment;
+            return MemberwiseClone() as Comment;
         }
 
         #region equality
+
         public bool Equals(Comment other)
         {
-            return other!=null&& this.Id == other.Id;
+            return other != null && Id == other.Id;
         }
 
         public override bool Equals(object obj)
@@ -90,15 +93,16 @@ namespace OrlovMikhail.LJ.Grabber.Entities
 
         public override int GetHashCode()
         {
-            return this.Id.GetHashCode();
+            return Id.GetHashCode();
         }
+
         #endregion
     }
 
     public enum UsagePolicy
     {
-        Default = 0,
-        Ignore,
-        Forced,
+        Default = 0
+        , Ignore
+        , Forced
     }
 }

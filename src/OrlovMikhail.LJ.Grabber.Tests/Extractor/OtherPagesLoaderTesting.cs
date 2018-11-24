@@ -28,38 +28,44 @@ namespace OrlovMikhail.LJ.Grabber.Extractor
                 CommentPages c = new CommentPages();
                 c.Current = cpi;
                 c.Total = total;
-                if(c.Current != 1)
+                if (c.Current != 1)
                 {
                     c.FirstUrl = new LiveJournalTarget("galkovsky", 1, page: 1).ToString();
                     c.PrevUrl = new LiveJournalTarget("galkovsky", 1, page: c.Current - 1).ToString();
                 }
-                if(c.Current != total)
+
+                if (c.Current != total)
                 {
                     c.LastUrl = new LiveJournalTarget("galkovsky", 1, page: total).ToString();
                     c.NextUrl = new LiveJournalTarget("galkovsky", 1, page: c.Current + 1).ToString();
                 }
+
                 return c;
             };
 
             clientMock.Expect(z => z.GetContent(Arg<LiveJournalTarget>.Is.NotNull, Arg<ILJClientData>.Is.Null))
-                 .Return(null)
-                 .WhenCalled(_ =>
-                 {
-                     LiveJournalTarget t = (LiveJournalTarget)_.Arguments[0];
-                     int page = t.Page.Value;
-                     _.ReturnValue = page.ToString();
-                 });
+                .Return(null)
+                .WhenCalled(
+                    _ =>
+                    {
+                        LiveJournalTarget t = (LiveJournalTarget) _.Arguments[0];
+                        int page = t.Page.Value;
+                        _.ReturnValue = page.ToString();
+                    }
+                );
 
             parserMock.Expect(z => z.ParseAsAnEntryPage(Arg<string>.Is.Anything))
                 .Return(null)
-                .WhenCalled(_ =>
-                {
-                    string req = (string)_.Arguments[0];
+                .WhenCalled(
+                    _ =>
+                    {
+                        string req = (string) _.Arguments[0];
 
-                    EntryPage ep = new EntryPage();
-                    ep.CommentPages = createCpByPage(int.Parse(req));
-                    _.ReturnValue = ep;
-                });
+                        EntryPage ep = new EntryPage();
+                        ep.CommentPages = createCpByPage(int.Parse(req));
+                        _.ReturnValue = ep;
+                    }
+                );
 
             OtherPagesLoader opl = new OtherPagesLoader(parserMock, clientMock);
 
@@ -69,7 +75,8 @@ namespace OrlovMikhail.LJ.Grabber.Extractor
 
             Assert.AreEqual(total - 1, others.Length);
 
-            IEnumerable<int> numbersWeExpect = Enumerable.Range(1, total).Where(z => z != source);
+            IEnumerable<int> numbersWeExpect = Enumerable.Range(1, total)
+                .Where(z => z != source);
             IEnumerable<int> numbersWeHave = others.Select(z => z.CommentPages.Current);
             CollectionAssert.AreEqual(numbersWeExpect, numbersWeHave);
         }

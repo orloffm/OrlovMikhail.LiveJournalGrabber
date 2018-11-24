@@ -10,28 +10,12 @@ namespace OrlovMikhail.LJ.Grabber.Helpers
 {
     public static class TestingShared
     {
-        /// <summary>Gets the content of an embedded resource.</summary>
-        public static string GetFileContent(string filename)
-        {
-            Assembly assembly = Assembly.GetExecutingAssembly();
-            string resourceName = assembly.GetManifestResourceNames().First(z => z.EndsWith(filename));
-
-            byte[] buffer;
-            using(Stream stream = assembly.GetManifestResourceStream(resourceName))
-            {
-                buffer = new byte[stream.Length];
-                stream.Read(buffer, 0, buffer.Length);
-            }
-
-            return Encoding.UTF8.GetString(buffer);
-        }
-
         public static void CreateTwoComments(out Comment nonFullVersion, out Comment fullVersion)
         {
             nonFullVersion = new Comment();
             fullVersion = new Comment();
 
-            foreach(Comment x in new Comment[] { nonFullVersion, fullVersion })
+            foreach (Comment x in new[] {nonFullVersion, fullVersion})
             {
                 x.Id = 1;
                 x.Date = new DateTime(2010, 1, 1, 5, 5, 5);
@@ -52,54 +36,44 @@ namespace OrlovMikhail.LJ.Grabber.Helpers
         public static EntryPage GenerateEntryPage(bool makeAllFull = false, int shiftNumbers = 0)
         {
             EntryPage p = new EntryPage();
-            p.Entry = new Entry()
+            p.Entry = new Entry
             {
-                Text = "Text",
-                Subject = "Subject",
-                Id = 1,
-                Poster = new UserLite() { Username = "galkovsky" },
-                Date = new DateTime(2015, 1, 1)
+                Text = "Text", Subject = "Subject", Id = 1, Poster = new UserLite {Username = "galkovsky"}
+                , Date = new DateTime(2015, 1, 1)
             };
 
-            p.CommentPages = new CommentPages()
+            p.CommentPages = new CommentPages
             {
-                Current = 1,
-                Total = 2,
-                NextUrl = new LiveJournalTarget("galkovsky", 1).ToString(),
-                LastUrl = new LiveJournalTarget("galkovsky", 1).ToString(),
+                Current = 1, Total = 2, NextUrl = new LiveJournalTarget("galkovsky", 1).ToString()
+                , LastUrl = new LiveJournalTarget("galkovsky", 1).ToString()
             };
 
-            Comment a = new Comment()
+            Comment a = new Comment
             {
-                IsFull = makeAllFull,
-                Poster = new UserLite() { Username = "pupkin" },
-                Text = makeAllFull ? "1" : String.Empty,
+                IsFull = makeAllFull, Poster = new UserLite {Username = "pupkin"}
+                , Text = makeAllFull ? "1" : string.Empty
             };
             SetIdAndUrls(a, 11 + shiftNumbers, null);
             {
-                Comment aB = new Comment()
+                Comment aB = new Comment
                 {
-                    IsFull = true,
-                    Poster = new UserLite() { Username = "galkovsky" },
-                    Text = "2",
+                    IsFull = true, Poster = new UserLite {Username = "galkovsky"}, Text = "2"
                 };
                 a.Replies.Comments.Add(aB);
                 SetIdAndUrls(aB, 12 + shiftNumbers, a);
                 {
-                    Comment aBC = new Comment()
+                    Comment aBC = new Comment
                     {
-                        IsFull = makeAllFull,
-                        Poster = new UserLite() { Username = "pupkin" },
-                        Text = makeAllFull ? "3" : String.Empty,
+                        IsFull = makeAllFull, Poster = new UserLite {Username = "pupkin"}
+                        , Text = makeAllFull ? "3" : string.Empty
                     };
                     aB.Replies.Comments.Add(aBC);
                     SetIdAndUrls(aBC, 13 + shiftNumbers, aB);
                 }
-                Comment aD = new Comment()
+                Comment aD = new Comment
                 {
-                    IsFull = makeAllFull,
-                    Poster = new UserLite() { Username = "pupkin" },
-                    Text = makeAllFull ? "4" : String.Empty,
+                    IsFull = makeAllFull, Poster = new UserLite {Username = "pupkin"}
+                    , Text = makeAllFull ? "4" : string.Empty
                 };
                 a.Replies.Comments.Add(aD);
                 SetIdAndUrls(aD, 14 + shiftNumbers, a);
@@ -110,12 +84,31 @@ namespace OrlovMikhail.LJ.Grabber.Helpers
             return p;
         }
 
+        /// <summary>Gets the content of an embedded resource.</summary>
+        public static string GetFileContent(string filename)
+        {
+            Assembly assembly = Assembly.GetExecutingAssembly();
+            string resourceName = assembly.GetManifestResourceNames()
+                .First(z => z.EndsWith(filename));
+
+            byte[] buffer;
+            using (Stream stream = assembly.GetManifestResourceStream(resourceName))
+            {
+                buffer = new byte[stream.Length];
+                stream.Read(buffer, 0, buffer.Length);
+            }
+
+            return Encoding.UTF8.GetString(buffer);
+        }
+
         public static void SetIdAndUrls(Comment c, int id, Comment parent)
         {
             c.Id = id;
             c.Url = new LiveJournalTarget("galkovsky", 1, id).ToString();
-            if(parent != null)
+            if (parent != null)
+            {
                 c.ParentUrl = new LiveJournalTarget("galkovsky", 1, parent.Id).ToString();
+            }
         }
     }
 }

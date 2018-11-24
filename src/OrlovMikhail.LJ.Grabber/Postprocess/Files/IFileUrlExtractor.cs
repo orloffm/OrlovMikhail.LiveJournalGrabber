@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace OrlovMikhail.LJ.Grabber.Postprocess.Files
+namespace OrlovMikhail.LJ.Grabber.PostProcess.Files
 {
     /// <summary>Extracts all file URLs from HTML.</summary>
     public interface IFileUrlExtractor

@@ -9,7 +9,6 @@ namespace OrlovMikhail.LJ.Grabber.Extractor.Interfaces
         EntryPage Work(string URI, string rootLocation, IFolderNamingStrategy subFolderGetter, string cookie);
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="URI"></param>
         /// <param name="rootLocation"></param>

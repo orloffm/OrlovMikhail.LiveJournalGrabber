@@ -3,7 +3,7 @@ using System.IO.Abstractions;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace OrlovMikhail.LJ.Grabber.Postprocess.Userpics
+namespace OrlovMikhail.LJ.Grabber.PostProcess.Userpics
 {
     public class UserpicStorage : StorageBase, IUserpicStorage
     {

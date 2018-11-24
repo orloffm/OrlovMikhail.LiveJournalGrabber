@@ -7,13 +7,15 @@ namespace OrlovMikhail.LJ.Grabber.Extractor.Interfaces
     /// <summary>Скачивает один пост as is, но разворачивая комментарии.</summary>
     public interface IExtractor
     {
-        /// <summary>Клиент, используемый данным экстрактором.
-        /// Устанавливается в конструкторе.</summary>
+        /// <summary>
+        ///     Клиент, используемый данным экстрактором.
+        ///     Устанавливается в конструкторе.
+        /// </summary>
         ILJClient Client { get; }
-
-        EntryPage GetFrom(LiveJournalTarget url, ILJClientData clientData);
 
         /// <summary>Заполняет объект поста.</summary>
         bool AbsorbAllData(EntryPage freshSource, ILJClientData clientData, ref EntryPage dumpData);
+
+        EntryPage GetFrom(LiveJournalTarget url, ILJClientData clientData);
     }
 }

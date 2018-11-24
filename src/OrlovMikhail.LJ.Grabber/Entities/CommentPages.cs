@@ -18,9 +18,7 @@ namespace OrlovMikhail.LJ.Grabber.Entities
         [DefaultValue(1)]
         public int Current { get; set; }
 
-        [XmlAttribute("total")]
-        [DefaultValue(1)]
-        public int Total { get; set; }
+        public static CommentPages Empty => new CommentPages();
 
         [XmlElement("url_first")]
         public string FirstUrl { get; set; }
@@ -34,27 +32,39 @@ namespace OrlovMikhail.LJ.Grabber.Entities
         [XmlElement("url_next")]
         public string NextUrl { get; set; }
 
+        [XmlAttribute("total")]
+        [DefaultValue(1)]
+        public int Total { get; set; }
+
         /// <summary>Checks that the instance has no data.</summary>
         public static bool IsEmpty(CommentPages value)
         {
-            if(!String.IsNullOrWhiteSpace(value.FirstUrl))
+            if (!string.IsNullOrWhiteSpace(value.FirstUrl))
+            {
                 return false;
+            }
 
-            if(!String.IsNullOrWhiteSpace(value.LastUrl))
+            if (!string.IsNullOrWhiteSpace(value.LastUrl))
+            {
                 return false;
+            }
 
-            if(!String.IsNullOrWhiteSpace(value.PrevUrl))
+            if (!string.IsNullOrWhiteSpace(value.PrevUrl))
+            {
                 return false;
+            }
 
-            if(!String.IsNullOrWhiteSpace(value.NextUrl))
+            if (!string.IsNullOrWhiteSpace(value.NextUrl))
+            {
                 return false;
+            }
 
-            if(value.Current > 1 || value.Total > 1)
+            if (value.Current > 1 || value.Total > 1)
+            {
                 return false;
+            }
 
             return true;
         }
-
-        public static CommentPages Empty { get { return new CommentPages(); } }
     }
 }

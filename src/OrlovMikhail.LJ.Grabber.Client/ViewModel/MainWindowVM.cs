@@ -4,6 +4,7 @@ using System.Windows.Input;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using log4net;
+using log4net.Repository.Hierarchy;
 using OrlovMikhail.LJ.Grabber.Client.Properties;
 using OrlovMikhail.LJ.Grabber.Extractor.Interfaces;
 
@@ -11,9 +12,10 @@ namespace OrlovMikhail.LJ.Grabber.Client.ViewModel
 {
     public class MainWindowVM : ViewModelBase, IMainWindowVM
     {
-        IWorker _w;
+        private static readonly ILog log = LogManager.GetLogger(typeof(MainWindowVM));
 
-        static readonly ILog log = LogManager.GetLogger(typeof(MainWindowVM));
+        private readonly RelayCommand _runCommand;
+        private readonly IWorker _w;
 
         public MainWindowVM(IWorker w)
         {
@@ -26,141 +28,152 @@ namespace OrlovMikhail.LJ.Grabber.Client.ViewModel
             app.StringAdded += (sender, args) =>
             {
                 string s = Log;
-                string add = String.IsNullOrWhiteSpace(s) ? "" : Environment.NewLine;
+                string add = string.IsNullOrWhiteSpace(s) ? "" : Environment.NewLine;
                 add += args.Value;
 
                 Log += add;
             };
 
             // Set it.
-            ((log4net.Repository.Hierarchy.Hierarchy)log4net.LogManager.GetLoggerRepository()).Root.AddAppender(app);
+            ((Hierarchy) LogManager.GetLoggerRepository()).Root.AddAppender(app);
             LoadSettings();
 
             IsEnabled = true;
         }
 
-        void LoadSettings()
-        {
-            this.URI = Settings.Default.URL;
-            this.Cookie = Settings.Default.Cookie;
-            this.BookRootLocation = Settings.Default.RootFolder;
-            this.Subfolder = Settings.Default.SubFolder;
-        }
+        public ICommand RunCommand => _runCommand;
 
         public void SaveSettings()
         {
-            Settings.Default.URL = this.URI;
-            Settings.Default.Cookie = this.Cookie;
-            Settings.Default.RootFolder = this.BookRootLocation;
-            Settings.Default.SubFolder = this.Subfolder;
+            Settings.Default.URL = URI;
+            Settings.Default.Cookie = Cookie;
+            Settings.Default.RootFolder = BookRootLocation;
+            Settings.Default.SubFolder = Subfolder;
 
             Settings.Default.Save();
         }
 
-        RelayCommand _runCommand;
-        public ICommand RunCommand { get { return _runCommand; } }
-
         private bool CanRun()
         {
-            return !String.IsNullOrWhiteSpace(URI)
-                && !String.IsNullOrWhiteSpace(Cookie)
-                && !String.IsNullOrWhiteSpace(BookRootLocation)
-                && !String.IsNullOrWhiteSpace(Subfolder)
-                ;
+            return !string.IsNullOrWhiteSpace(URI) && !string.IsNullOrWhiteSpace(Cookie) &&
+                   !string.IsNullOrWhiteSpace(BookRootLocation) && !string.IsNullOrWhiteSpace(Subfolder);
+        }
+
+        private void LoadSettings()
+        {
+            URI = Settings.Default.URL;
+            Cookie = Settings.Default.Cookie;
+            BookRootLocation = Settings.Default.RootFolder;
+            Subfolder = Settings.Default.SubFolder;
         }
 
         private void Run()
         {
             if (!CanRun())
+            {
                 return;
+            }
 
             Task task = Task.Factory.StartNew(() => RunInternal());
-            task.ContinueWith(t => t.Exception.Handle(ex =>
+            task.ContinueWith(
+                t => t.Exception.Handle(
+                    ex =>
                     {
                         log.Error("Error: " + ex.Message + Environment.NewLine + ex.StackTrace);
                         return true;
-                    }), TaskContinuationOptions.OnlyOnFaulted);
+                    }
+                )
+                , TaskContinuationOptions.OnlyOnFaulted
+            );
         }
 
         private void RunInternal()
         {
             try
             {
-                this.IsEnabled = false;
+                IsEnabled = false;
 
-                Log = String.Empty;
+                Log = string.Empty;
                 SaveSettings();
 
                 _w.WorkInGivenTarget(URI, BookRootLocation, Subfolder, Cookie);
             }
             finally
             {
-                this.IsEnabled = true;
+                IsEnabled = true;
             }
         }
 
         #region properties
+
         private string _log;
+
         public string Log
         {
-            get { return _log; }
+            get => _log;
             set
             {
-                Set<string>(() => Log, ref _log, value);
+                Set(() => Log, ref _log, value);
                 _runCommand.RaiseCanExecuteChanged();
             }
         }
 
         private string _uri;
+
         public string URI
         {
-            get { return _uri; }
+            get => _uri;
             set
             {
-                Set<string>(() => URI, ref _uri, value);
+                Set(() => URI, ref _uri, value);
                 _runCommand.RaiseCanExecuteChanged();
             }
         }
 
         private string _cookie;
+
         public string Cookie
         {
-            get { return _cookie; }
+            get => _cookie;
             set
             {
-                Set<string>(() => Cookie, ref _cookie, value);
+                Set(() => Cookie, ref _cookie, value);
                 _runCommand.RaiseCanExecuteChanged();
             }
         }
 
         private string _bookRootLocation;
+
         public string BookRootLocation
         {
-            get { return _bookRootLocation; }
+            get => _bookRootLocation;
             set
             {
-                Set<string>(() => BookRootLocation, ref _bookRootLocation, value);
+                Set(() => BookRootLocation, ref _bookRootLocation, value);
                 _runCommand.RaiseCanExecuteChanged();
             }
         }
 
         private string _subFolder;
+
         public string Subfolder
         {
-            get { return _subFolder; }
+            get => _subFolder;
             set
             {
-                Set<string>(() => Subfolder, ref _subFolder, value);
+                Set(() => Subfolder, ref _subFolder, value);
                 _runCommand.RaiseCanExecuteChanged();
             }
         }
 
         private bool _isEnabled;
+
         public bool IsEnabled
         {
-            get { return _isEnabled; }
-            set { Set<bool>(() => IsEnabled, ref _isEnabled, value); }
+            get => _isEnabled;
+            set { Set(() => IsEnabled, ref _isEnabled, value); }
         }
+
         #endregion
     }
 }

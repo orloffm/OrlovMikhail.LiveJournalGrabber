@@ -1,5 +1,4 @@
-﻿using System;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 
 namespace OrlovMikhail.LJ.Grabber.Entities
 {
@@ -10,7 +9,7 @@ namespace OrlovMikhail.LJ.Grabber.Entities
         public void SaysItHasAParentIfAndOnlyIfItHasAParentUrl()
         {
             Comment c = new Comment();
-            c.ParentUrl = String.Empty;
+            c.ParentUrl = string.Empty;
             Assert.IsFalse(c.ParentUrlSpecified);
 
             c.ParentUrl = null;

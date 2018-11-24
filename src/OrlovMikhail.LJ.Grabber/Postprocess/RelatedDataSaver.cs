@@ -4,11 +4,11 @@ using System.IO.Abstractions;
 using OrlovMikhail.LJ.Grabber.Client;
 using OrlovMikhail.LJ.Grabber.Entities;
 using OrlovMikhail.LJ.Grabber.Entities.Helpers.Interfaces;
-using OrlovMikhail.LJ.Grabber.Postprocess.Files;
-using OrlovMikhail.LJ.Grabber.Postprocess.Filter;
-using OrlovMikhail.LJ.Grabber.Postprocess.Userpics;
+using OrlovMikhail.LJ.Grabber.PostProcess.Files;
+using OrlovMikhail.LJ.Grabber.PostProcess.Filter;
+using OrlovMikhail.LJ.Grabber.PostProcess.Userpics;
 
-namespace OrlovMikhail.LJ.Grabber.Postprocess
+namespace OrlovMikhail.LJ.Grabber.PostProcess
 {
     public class RelatedDataSaver : IRelatedDataSaver
     {

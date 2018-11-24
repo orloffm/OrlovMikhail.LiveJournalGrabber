@@ -16,13 +16,13 @@ namespace OrlovMikhail.LJ.Grabber.Entities
         public string Name { get; set; }
 
         [XmlIgnore]
-        public bool NameSpecified { get { return !String.IsNullOrWhiteSpace(Name); } }
+        public bool NameSpecified => !string.IsNullOrWhiteSpace(Name);
 
         [XmlAttribute("username")]
         public string Username { get; set; }
 
         [XmlIgnore]
-        public bool UsernameSpecified { get { return !String.IsNullOrWhiteSpace(Username); } }
+        public bool UsernameSpecified => !string.IsNullOrWhiteSpace(Username);
 
         //P (personal), C (community), Y (syndicated), S (shared), I (external identity)
         [XmlAttribute("type")]
@@ -30,7 +30,7 @@ namespace OrlovMikhail.LJ.Grabber.Entities
         public UserLiteType UserType { get; set; }
 
         [XmlIgnore]
-        public bool UserTypeSpecified { get { return UserType != UserLiteType.P; } }
+        public bool UserTypeSpecified => UserType != UserLiteType.P;
 
         public override string ToString()
         {

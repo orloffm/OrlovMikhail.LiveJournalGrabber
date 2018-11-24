@@ -1,6 +1,6 @@
 ﻿using NUnit.Framework;
 using OrlovMikhail.LJ.Grabber.Helpers;
-using OrlovMikhail.LJ.Grabber.Postprocess.Files;
+using OrlovMikhail.LJ.Grabber.PostProcess.Files;
 
 // ReSharper disable InvokeAsExtensionMethod
 
@@ -9,43 +9,20 @@ namespace OrlovMikhail.LJ.Grabber.Entities.Helpers
     [TestFixture]
     public sealed class EntryHelperTesting
     {
-        private EntryHelper _eh;
-
         [SetUp]
         public void BeforeTests()
         {
             _eh = new EntryHelper(new EntryBaseHelper(new FileUrlExtractor()));
         }
 
-        #region update with
-        [Test]
-        public void ThrowsIfArgument1IsNull()
-        {
-            Assert.That(() => _eh.UpdateWith(null, new Entry()), Throws.ArgumentNullException);
-        }
-
-        [Test]
-        public void ThrowsIfArgument2IsNull()
-        {
-            Assert.That(() => _eh.UpdateWith(new Entry(), null), Throws.ArgumentNullException);
-        }
-
-        [Test]
-        public void ThrowsIfTargetAndSourceHaveDifferentIds()
-        {
-            Entry e1 = new Entry();
-            Entry e2 = TestingShared.GenerateEntryPage().Entry;
-            e1.Id = 1;
-            e2.Id = 2;
-
-            Assert.That(() => _eh.UpdateWith(e1, e2), Throws.ArgumentException);
-        }
+        private EntryHelper _eh;
 
         [Test]
         public void DoesntThrowIfOneOfIdsIsZero()
         {
             Entry e1 = new Entry();
-            Entry e2 = TestingShared.GenerateEntryPage().Entry;
+            Entry e2 = TestingShared.GenerateEntryPage()
+                .Entry;
             e1.Id = 0;
             e2.Id = 2;
 
@@ -67,7 +44,19 @@ namespace OrlovMikhail.LJ.Grabber.Entities.Helpers
             Assert.IsNotNull(e1.Date);
             Assert.AreNotEqual(default(long), e1.Id);
         }
-        
+
+        [Test]
+        public void EntryTextDoesNotGetUpdatedIfItIsSmaller()
+        {
+            Entry p1 = new Entry();
+            p1.Text = "ABCDEF";
+            Entry p2 = new Entry();
+            p2.Text = "ABCD";
+
+            _eh.UpdateWith(p1, p2);
+            Assert.AreEqual("ABCDEF", p1.Text);
+        }
+
         [Test]
         public void EntryTextGetsUpdatedIfItIsLarger()
         {
@@ -81,16 +70,27 @@ namespace OrlovMikhail.LJ.Grabber.Entities.Helpers
         }
 
         [Test]
-        public void EntryTextDoesNotGetUpdatedIfItIsSmaller()
+        public void ThrowsIfArgument1IsNull()
         {
-            Entry p1 = new Entry();
-            p1.Text = "ABCDEF";
-            Entry p2 = new Entry();
-            p2.Text = "ABCD";
-
-            _eh.UpdateWith(p1, p2);
-            Assert.AreEqual("ABCDEF", p1.Text);
+            Assert.That(() => _eh.UpdateWith(null, new Entry()), Throws.ArgumentNullException);
         }
-        #endregion
+
+        [Test]
+        public void ThrowsIfArgument2IsNull()
+        {
+            Assert.That(() => _eh.UpdateWith(new Entry(), null), Throws.ArgumentNullException);
+        }
+
+        [Test]
+        public void ThrowsIfTargetAndSourceHaveDifferentIds()
+        {
+            Entry e1 = new Entry();
+            Entry e2 = TestingShared.GenerateEntryPage()
+                .Entry;
+            e1.Id = 1;
+            e2.Id = 2;
+
+            Assert.That(() => _eh.UpdateWith(e1, e2), Throws.ArgumentException);
+        }
     }
 }
