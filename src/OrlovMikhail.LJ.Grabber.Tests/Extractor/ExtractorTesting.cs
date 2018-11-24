@@ -10,7 +10,7 @@ using NUnit.Framework;
 namespace OrlovMikhail.LJ.Grabber.Tests
 {
     [TestFixture]
-    public class Extractor_Testing
+    public class ExtractorTesting
     {
 
     }

@@ -8,7 +8,7 @@ using NUnit.Framework;
 namespace OrlovMikhail.LJ.Grabber.Tests
 {
     [TestFixture]
-    public class LayerParser_Testing
+    public class LayerParserTesting
     {
         [TestCase("2015-6-26 14:48:5")]
         [TestCase("2015-12-26 8:51:34")]
@@ -76,7 +76,7 @@ namespace OrlovMikhail.LJ.Grabber.Tests
             string serialized = p.Serialize(page);
             page = p.ParseAsAnEntryPage(serialized);
 
-            Assert.IsNotNullOrEmpty(page.Entry.Poster.Username);
+            Assert.That(page.Entry.Poster.Username, Is.Not.Null.And.Not.Empty);
         }
     }
 }

@@ -9,7 +9,7 @@ using NUnit.Framework;
 namespace OrlovMikhail.LJ.Grabber.Tests
 {
     [TestFixture]
-    public sealed class RepliesHelper_Testing
+    public sealed class RepliesHelperTesting
     {
         private RepliesHelper _rh;
 
@@ -103,14 +103,14 @@ namespace OrlovMikhail.LJ.Grabber.Tests
             Assert.AreEqual(b.DateValue, a.DateValue);
         }
 
-        [Test, ExpectedException]
+        [Test]
         public void ThrowsIfNewVersionIsOfDifferentId()
         {
             Comment a, b;
             TestingShared.CreateTwoComments(out a, out b);
             b.Id++;
 
-            _rh.UpdateDirectDataWith(a, b);
+            Assert.That(() => _rh.UpdateDirectDataWith(a, b), Throws.ArgumentException);
         }
         #endregion
 
@@ -120,14 +120,14 @@ namespace OrlovMikhail.LJ.Grabber.Tests
         {
             Replies cs = new Replies();
             Comment a = new Comment() { Id = 11, IsFull = false, Text = String.Empty };
-            Comment a_b = new Comment() { Id = 12, IsFull = true, Text = "2" };
-            Comment a_b_c = new Comment() { Id = 13, IsFull = false, Text = String.Empty };
-            Comment a_d = new Comment() { Id = 14, IsFull = false, Text = String.Empty };
+            Comment aB = new Comment() { Id = 12, IsFull = true, Text = "2" };
+            Comment aBc = new Comment() { Id = 13, IsFull = false, Text = String.Empty };
+            Comment aD = new Comment() { Id = 14, IsFull = false, Text = String.Empty };
 
             cs.Comments.Add(a);
-            a.Replies.Comments.Add(a_b);
-            a.Replies.Comments.Add(a_d);
-            a_b.Replies.Comments.Add(a_b_c);
+            a.Replies.Comments.Add(aB);
+            a.Replies.Comments.Add(aD);
+            aB.Replies.Comments.Add(aBc);
 
             long[] texts = _rh.EnumerateRequiringFullUp(cs).Select(z => z.Id).ToArray();
             Assert.AreEqual(3, texts.Length, "Should've found 3 comments.");

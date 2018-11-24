@@ -11,7 +11,7 @@ using Rhino.Mocks;
 namespace OrlovMikhail.LJ.Grabber.Tests
 {
     [TestFixture]
-    public sealed class EntryBaseHelper_Testing
+    public sealed class EntryBaseHelperTesting
     {
         private IFileUrlExtractor _fileUrlExtractor;
 

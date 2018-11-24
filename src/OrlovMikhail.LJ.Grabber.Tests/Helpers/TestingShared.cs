@@ -77,32 +77,32 @@ namespace OrlovMikhail.LJ.Grabber.Tests
             };
             SetIdAndUrls(a, 11 + shiftNumbers, null);
             {
-                Comment a_b = new Comment()
+                Comment aB = new Comment()
                 {
                     IsFull = true,
                     Poster = new UserLite() { Username = "galkovsky" },
                     Text = "2",
                 };
-                a.Replies.Comments.Add(a_b);
-                SetIdAndUrls(a_b, 12 + shiftNumbers, a);
+                a.Replies.Comments.Add(aB);
+                SetIdAndUrls(aB, 12 + shiftNumbers, a);
                 {
-                    Comment a_b_c = new Comment()
+                    Comment aBC = new Comment()
                     {
                         IsFull = makeAllFull,
                         Poster = new UserLite() { Username = "pupkin" },
                         Text = makeAllFull ? "3" : String.Empty,
                     };
-                    a_b.Replies.Comments.Add(a_b_c);
-                    SetIdAndUrls(a_b_c, 13 + shiftNumbers, a_b);
+                    aB.Replies.Comments.Add(aBC);
+                    SetIdAndUrls(aBC, 13 + shiftNumbers, aB);
                 }
-                Comment a_d = new Comment()
+                Comment aD = new Comment()
                 {
                     IsFull = makeAllFull,
                     Poster = new UserLite() { Username = "pupkin" },
                     Text = makeAllFull ? "4" : String.Empty,
                 };
-                a.Replies.Comments.Add(a_d);
-                SetIdAndUrls(a_d, 14 + shiftNumbers, a);
+                a.Replies.Comments.Add(aD);
+                SetIdAndUrls(aD, 14 + shiftNumbers, a);
             }
 
             p.Replies.Comments.Add(a);

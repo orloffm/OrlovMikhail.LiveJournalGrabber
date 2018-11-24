@@ -8,16 +8,16 @@ using NUnit.Framework;
 namespace OrlovMikhail.LJ.Grabber.Tests
 {
     [TestFixture]
-    public class FileUrlExtractor_Testing
+    public class FileUrlExtractorTesting
     {
         private string _html;
         private IFileUrlExtractor _ex;
 
-        private const string URL1 = @"http://www.samisdat.com/picture/LJ3/3409.jpg";
-        private const string URL2 = @"http://www.samisdat.com/picture/LJ3/3423.jpg";
+        private const string Url1 = @"http://www.samisdat.com/picture/LJ3/3409.jpg";
+        private const string Url2 = @"http://www.samisdat.com/picture/LJ3/3423.jpg";
 
         [SetUp]
-        public void LoadHTML()
+        public void LoadHtml()
         {
             string content = TestingShared.GetFileContent("testpage_247911.xml");
 
@@ -32,28 +32,28 @@ namespace OrlovMikhail.LJ.Grabber.Tests
             string[] urls = _ex.GetImagesURLs(_html);
 
             Assert.IsTrue(urls.Length > 5);
-            CollectionAssert.Contains(urls, URL1);
-            CollectionAssert.Contains(urls, URL2);
+            CollectionAssert.Contains(urls, Url1);
+            CollectionAssert.Contains(urls, Url2);
         }
 
         [Test]
         public void ProvidesUrlsForReplacing()
         {
             int called = 0;
-            Func<string, string> matcher = _s =>
+            Func<string, string> matcher = s =>
             {
                 called++;
-                if(_s == URL1)
+                if(s == Url1)
                     return "ABC";
-                else if(_s == URL2)
+                else if(s == Url2)
                     return null;
                 else
-                    return _s;
+                    return s;
             };
 
             string result = _ex.ReplaceFileUrls(_html, matcher);
-            Assert.IsFalse(result.Contains(URL1));
-            Assert.IsTrue(result.Contains(URL2));
+            Assert.IsFalse(result.Contains(Url1));
+            Assert.IsTrue(result.Contains(Url2));
             Assert.IsTrue(result.Contains("<img src=\"ABC\""));
         }
     }

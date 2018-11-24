@@ -9,7 +9,7 @@ using NUnit.Framework;
 namespace OrlovMikhail.LJ.Grabber.Tests
 {
     [TestFixture]
-    public sealed class EntryHelper_Testing
+    public sealed class EntryHelperTesting
     {
         private EntryHelper _eh;
 
@@ -20,19 +20,19 @@ namespace OrlovMikhail.LJ.Grabber.Tests
         }
 
         #region update with
-        [Test, ExpectedException]
+        [Test]
         public void ThrowsIfArgument1IsNull()
         {
-            _eh.UpdateWith(null, new Entry());
+            Assert.That(() => _eh.UpdateWith(null, new Entry()), Throws.ArgumentNullException);
         }
 
-        [Test, ExpectedException]
+        [Test]
         public void ThrowsIfArgument2IsNull()
         {
-            _eh.UpdateWith(new Entry(), null);
+            Assert.That(() => _eh.UpdateWith(new Entry(), null), Throws.ArgumentNullException);
         }
 
-        [Test, ExpectedException(typeof(ArgumentException))]
+        [Test]
         public void ThrowsIfTargetAndSourceHaveDifferentIds()
         {
             Entry e1 = new Entry();
@@ -40,7 +40,7 @@ namespace OrlovMikhail.LJ.Grabber.Tests
             e1.Id = 1;
             e2.Id = 2;
 
-            _eh.UpdateWith(e1, e2);
+            Assert.That(() => _eh.UpdateWith(e1, e2), Throws.ArgumentException);
         }
 
         [Test]
@@ -64,8 +64,8 @@ namespace OrlovMikhail.LJ.Grabber.Tests
 
             _eh.UpdateWith(e1, p2.Entry);
 
-            Assert.IsNotNullOrEmpty(e1.Text);
-            Assert.IsNotNullOrEmpty(e1.Subject);
+            Assert.That(e1.Text, Is.Not.Null.And.Not.Empty);
+            Assert.That(e1.Subject, Is.Not.Null.And.Not.Empty);
             Assert.IsNotNull(e1.Date);
             Assert.AreNotEqual(default(long), e1.Id);
         }

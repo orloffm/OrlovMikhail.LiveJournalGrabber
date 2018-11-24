@@ -11,7 +11,7 @@ using Rhino.Mocks;
 namespace OrlovMikhail.LJ.Grabber.Tests
 {
     [TestFixture]
-    public class OtherPagesLoader_Testing
+    public class OtherPagesLoaderTesting
     {
         [Test]
         public void DownloadsCommentPagesCorrectly()
@@ -23,7 +23,7 @@ namespace OrlovMikhail.LJ.Grabber.Tests
             ILayerParser parserMock = MockRepository.GenerateMock<ILayerParser>();
 
             // Creates a comment pages object by page index.
-            Func<int, CommentPages> createCPByPage = cpi =>
+            Func<int, CommentPages> createCpByPage = cpi =>
             {
                 CommentPages c = new CommentPages();
                 c.Current = cpi;
@@ -57,14 +57,14 @@ namespace OrlovMikhail.LJ.Grabber.Tests
                     string req = (string)_.Arguments[0];
 
                     EntryPage ep = new EntryPage();
-                    ep.CommentPages = createCPByPage(int.Parse(req));
+                    ep.CommentPages = createCpByPage(int.Parse(req));
                     _.ReturnValue = ep;
                 });
 
             OtherPagesLoader opl = new OtherPagesLoader(parserMock, clientMock);
 
             // This is the source object we get from an entry page.
-            CommentPages cp = createCPByPage(source);
+            CommentPages cp = createCpByPage(source);
             EntryPage[] others = opl.LoadOtherCommentPages(cp, null);
 
             Assert.AreEqual(total - 1, others.Length);

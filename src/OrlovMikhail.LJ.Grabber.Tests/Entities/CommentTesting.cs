@@ -1,14 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using NUnit.Framework;
 
 namespace OrlovMikhail.LJ.Grabber.Tests.Entities
 {
     [TestFixture]
-   public class Comment_Testing
+    public class CommentTesting
     {
         [Test]
         public void SaysItHasAParentIfAndOnlyIfItHasAParentUrl()

@@ -8,7 +8,7 @@ using NUnit.Framework;
 namespace OrlovMikhail.LJ.Grabber.Tests
 {
     [TestFixture]
-    public class SuitableCommentsPicker_Testing
+    public class SuitableCommentsPickerTesting
     {
         RepliesHelper _rh;
         SuitableCommentsPicker _picker;
@@ -42,10 +42,10 @@ namespace OrlovMikhail.LJ.Grabber.Tests
             a.Poster.Username = "A";
             ep.Replies.Comments.Add(a);
 
-            Comment a_b = new Comment();
-            TestingShared.SetIdAndUrls(a_b, 2, a);
-            a_b.Poster.Username = "B";
-            a.Replies.Comments.Add(a_b);
+            Comment aB = new Comment();
+            TestingShared.SetIdAndUrls(aB, 2, a);
+            aB.Poster.Username = "B";
+            a.Replies.Comments.Add(aB);
 
             List<Comment[]> result = _picker.Pick(ep);
             Assert.AreEqual(1, result.Count);
@@ -66,37 +66,37 @@ namespace OrlovMikhail.LJ.Grabber.Tests
             a.Poster.Username = "B";
             ep.Replies.Comments.Add(a);
 
-            Comment a_b = new Comment();
-            TestingShared.SetIdAndUrls(a_b, 2, a);
-            a_b.Poster.Username = "A";
-            a.Replies.Comments.Add(a_b);
+            Comment aB = new Comment();
+            TestingShared.SetIdAndUrls(aB, 2, a);
+            aB.Poster.Username = "A";
+            a.Replies.Comments.Add(aB);
 
-            Comment a_b_c = new Comment();
-            TestingShared.SetIdAndUrls(a_b_c, 3, a_b);
-            a_b_c.Poster.Username = firstReplyIsTheSamePerson ? "B" : "C";
-            a_b.Replies.Comments.Add(a_b_c);
+            Comment aBC = new Comment();
+            TestingShared.SetIdAndUrls(aBC, 3, aB);
+            aBC.Poster.Username = firstReplyIsTheSamePerson ? "B" : "C";
+            aB.Replies.Comments.Add(aBC);
 
-            Comment a_b_c_d = new Comment();
-            TestingShared.SetIdAndUrls(a_b_c_d, 4, a_b_c);
-            a_b_c_d.Poster.Username = firstLeafIsAuthor ? "A" : "R";
-            a_b_c.Replies.Comments.Add(a_b_c_d);
+            Comment aBCD = new Comment();
+            TestingShared.SetIdAndUrls(aBCD, 4, aBC);
+            aBCD.Poster.Username = firstLeafIsAuthor ? "A" : "R";
+            aBC.Replies.Comments.Add(aBCD);
 
-            Comment a_b_e = new Comment();
-            TestingShared.SetIdAndUrls(a_b_e, 5, a_b);
-            a_b_e.Poster.Username = "X";
-            a_b.Replies.Comments.Add(a_b_e);
+            Comment aBE = new Comment();
+            TestingShared.SetIdAndUrls(aBE, 5, aB);
+            aBE.Poster.Username = "X";
+            aB.Replies.Comments.Add(aBE);
 
-            Comment a_b_e_f = new Comment();
-            TestingShared.SetIdAndUrls(a_b_e_f, 6, a_b_e);
-            a_b_e_f.Poster.Username = "A";
-            a_b_e.Replies.Comments.Add(a_b_e_f);
+            Comment aBEF = new Comment();
+            TestingShared.SetIdAndUrls(aBEF, 6, aBE);
+            aBEF.Poster.Username = "A";
+            aBE.Replies.Comments.Add(aBEF);
 
             List<Comment[]> result = _picker.Pick(ep);
             if(firstLeafIsAuthor)
             {
                 Assert.AreEqual(2, result.Count);
-                CollectionAssert.AreEqual(new[] { a, a_b, a_b_c, a_b_c_d }, result[0]);
-                CollectionAssert.AreEqual(new[] { a_b_e, a_b_e_f }, result[1]);
+                CollectionAssert.AreEqual(new[] { a, aB, aBC, aBCD }, result[0]);
+                CollectionAssert.AreEqual(new[] { aBE, aBEF }, result[1]);
             }
             else
             {
@@ -104,14 +104,14 @@ namespace OrlovMikhail.LJ.Grabber.Tests
                 {
                     // We take a_b_c.
                     Assert.AreEqual(2, result.Count);
-                    CollectionAssert.AreEqual(new[] { a, a_b, a_b_c }, result[0]);
-                    CollectionAssert.AreEqual(new[] { a_b_e, a_b_e_f }, result[1]);
+                    CollectionAssert.AreEqual(new[] { a, aB, aBC }, result[0]);
+                    CollectionAssert.AreEqual(new[] { aBE, aBEF }, result[1]);
                 }
                 else
                 {
                     // We don't take it. We don't care what he wrote.
                     Assert.AreEqual(1, result.Count);
-                    CollectionAssert.AreEqual(new[] { a, a_b, a_b_e, a_b_e_f }, result[0]);
+                    CollectionAssert.AreEqual(new[] { a, aB, aBE, aBEF }, result[0]);
                 }
             }
         }

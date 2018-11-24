@@ -4,7 +4,7 @@ using NUnit.Framework;
 namespace OrlovMikhail.LJ.Grabber.Tests
 {
     [TestFixture]
-    public class LiveJournalTarget_Testing
+    public class LiveJournalTargetTesting
     {
 
         [TestCase(@"http://galkovsky.livejournal.com/15915.html", "galkovsky", 15915L, null, null, false)]
@@ -25,7 +25,7 @@ namespace OrlovMikhail.LJ.Grabber.Tests
         [TestCase("galkovsky", 247911L, null, null, true, ExpectedResult = @"http://galkovsky.livejournal.com/247911.html?style=mine")]
         [TestCase("galkovsky", 247911L, null, 2, false, ExpectedResult = @"http://galkovsky.livejournal.com/247911.html?page=2")]
         [TestCase("galkovsky", 247911L, null, 2, true, ExpectedResult = @"http://galkovsky.livejournal.com/247911.html?page=2&style=mine")]
-        public string ConvertedToStringOK(string username, long postId, long? commentId, int? page, bool styleMine)
+        public string ConvertedToStringOk(string username, long postId, long? commentId, int? page, bool styleMine)
         {
             LiveJournalTarget ret = new LiveJournalTarget(username, postId, commentId, page, styleMine);
             string result = ret.ToString();

@@ -9,7 +9,7 @@ using NUnit.Framework;
 namespace OrlovMikhail.LJ.Grabber.Tests
 {
     [TestFixture]
-    public class UserpicStorage_Testing
+    public class FileStorageFactoryTesting
     {
 
     }

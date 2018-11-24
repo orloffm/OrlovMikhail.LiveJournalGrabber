@@ -8,7 +8,7 @@ using NUnit.Framework;
 namespace OrlovMikhail.LJ.Grabber.Tests.Entities
 {
     [TestFixture]
-    public sealed class CommentPages_Testing
+    public sealed class CommentPagesTesting
     {
         [Test]
         public void SaysItsEmptyOnlyWhenItIsReallyEmpty()

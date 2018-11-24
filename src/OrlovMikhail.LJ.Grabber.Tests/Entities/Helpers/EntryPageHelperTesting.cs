@@ -11,7 +11,7 @@ using Rhino.Mocks;
 namespace OrlovMikhail.LJ.Grabber.Tests
 {
     [TestFixture]
-    public sealed class EntryPageHelper_Testing
+    public sealed class EntryPageHelperTesting
     {
         private EntryPageHelper _eph;
         private IEntryHelper _entryHelper;
@@ -27,20 +27,20 @@ namespace OrlovMikhail.LJ.Grabber.Tests
             _eph = new EntryPageHelper(_entryHelper, _repliesHelper);
         }
 
-        [Test, ExpectedException(typeof(ArgumentNullException))]
+        [Test]
         public void ThrowsIfNoTargetSpecified()
         {
             EntryPage other = TestingShared.GenerateEntryPage();
 
-            _eph.AddData(null, other);
+            Assert.That(() => _eph.AddData(null, other), Throws.ArgumentNullException);
         }
 
-        [Test, ExpectedException(typeof(ArgumentNullException))]
+        [Test]
         public void ThrowsIfNoSourceSpecified()
         {
             EntryPage other = TestingShared.GenerateEntryPage();
 
-            _eph.AddData(other, null);
+            Assert.That(() => _eph.AddData(other, null), Throws.ArgumentNullException);
         }
 
         [TestCase(true)]

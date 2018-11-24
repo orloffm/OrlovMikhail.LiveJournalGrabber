@@ -8,7 +8,7 @@ using NUnit.Framework;
 namespace OrlovMikhail.LJ.Grabber.Tests.Entities
 {
     [TestFixture]
-    public sealed class EntryPage_Testing
+    public sealed class EntryPageTesting
     {
         [Test]
         public void CommentsAreSerializedOnlyWhenAreNotEmpty()
